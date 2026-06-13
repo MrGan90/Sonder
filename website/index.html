@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Sonder — Indie Game Developer. Building immersive worlds at the intersection of code and art.">
+<meta name="theme-color" content="#06060f">
+<title>Sonder — Indie Game Developer</title>
+<!-- Open Graph -->
+<meta property="og:title" content="Sonder — Indie Game Developer">
+<meta property="og:description" content="Building immersive worlds at the intersection of code and art">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sonder">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sonder — Indie Game Developer">
+<meta name="twitter:description" content="Building immersive worlds at the intersection of code and art">
+<!-- Favicon (inline SVG) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CSS DESIGN SYSTEM
+   ============================================================ */
+:root {
+  --bg-deep: #06060f;
+  --neon-cyan: #00e5ff;
+  --neon-magenta: #ff00e5;
+  --neon-purple: #8b00ff;
+  --neon-green: #00ff88;
+  --neon-gold: #ffd700;
+  --glass-bg: rgba(8,8,20,0.45);
+  --glass-bg-hover: rgba(12,12,30,0.6);
+  --glass-border: rgba(255,255,255,0.06);
+  --glass-border-hover: rgba(255,255,255,0.12);
+  --glass-highlight: rgba(255,255,255,0.08);
+  --glass-blur: 24px;
+  --text-primary: #ebeaf0;
+  --text-secondary: #9898b0;
+  --text-muted: #585870;
+  --font-sans: 'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-mono: 'JetBrains Mono','Fira Code','SF Mono','Cascadia Code',monospace;
+  --max-width: 1200px;
+  --nav-height: 64px;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --ease-out-expo: cubic-bezier(0.16,1,0.3,1);
+  --transition-medium: 300ms var(--ease-out-expo);
+  --transition-slow: 600ms var(--ease-out-expo);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  font-family:var(--font-sans);
+  font-size:1.05rem;
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+::selection{background:rgba(0,229,255,0.3);color:#fff}
+
+/* ---- Fluid Canvas ---- */
+#fluid-canvas{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  z-index:0;pointer-events:auto;
+}
+.app{position:relative;z-index:1}
+
+/* ---- Glass Panel ---- */
+.glass-panel{
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  box-shadow:0 4px 30px rgba(0,0,0,0.3),inset 0 1px 0 var(--glass-highlight);
+  transition:background var(--transition-medium),border-color var(--transition-medium),transform var(--transition-medium);
+}
+.glass-panel:hover{
+  background:var(--glass-bg-hover);
+  border-color:var(--glass-border-hover);
+}
+@supports not ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+  .glass-panel{background:rgba(8,8,20,0.85)}
+  .glass-panel:hover{background:rgba(12,12,30,0.9)}
+}
+
+/* ---- Navigation ---- */
+.navbar{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 32px);max-width:var(--max-width);
+  height:var(--nav-height);z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;
+}
+.nav-logo{
+  font-family:var(--font-mono);font-weight:700;font-size:1.25rem;
+  letter-spacing:0.1em;color:var(--neon-cyan);text-decoration:none;
+  transition:color 150ms ease;
+}
+.nav-logo:hover{color:var(--neon-purple)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  color:var(--text-secondary);text-decoration:none;
+  font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;
+  font-weight:500;transition:color 150ms ease;
+}
+.nav-links a:hover{color:var(--neon-cyan)}
+.nav-toggle{
+  display:none;background:none;border:none;color:var(--text-primary);
+  font-size:1.5rem;cursor:pointer;padding:0.5rem;line-height:1;
+}
+
+/* ---- Hero ---- */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:2rem;position:relative;
+}
+.hero-content{max-width:800px}
+.hero-name{
+  font-size:clamp(3rem,8vw,7rem);font-weight:800;
+  line-height:1.05;letter-spacing:-0.03em;margin-bottom:0.5rem;
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple),var(--neon-magenta));
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:gradientShift 6s ease-in-out infinite;
+}
+@keyframes gradientShift{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.hero-role{
+  font-size:clamp(1.25rem,3vw,1.75rem);font-weight:600;
+  color:var(--text-primary);margin-bottom:0.75rem;
+}
+.hero-tagline{
+  font-size:1.1rem;color:var(--text-secondary);
+  max-width:500px;margin:0 auto 2.5rem;
+}
+.hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{
+  display:inline-block;padding:12px 28px;border-radius:100px;
+  font-weight:600;font-size:0.95rem;text-decoration:none;
+  transition:all var(--transition-medium);cursor:pointer;
+  border:none;font-family:var(--font-sans);
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-purple));
+  color:#fff;box-shadow:0 4px 20px rgba(0,229,255,0.3);
+}
+.btn-primary:hover{
+  box-shadow:0 8px 35px rgba(0,229,255,0.5);
+  transform:translateY(-2px);
+}
+.btn-secondary{
+  background:transparent;color:var(--neon-cyan);
+  border:1px solid var(--neon-cyan);
+}
+.btn-secondary:hover{
+  background:rgba(0,229,255,0.08);
+  box-shadow:0 4px 20px rgba(0,229,255,0.15);
+}
+.scroll-indicator{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  color:var(--text-muted);font-size:1.5rem;
+  animation:bounce 2s ease-in-out infinite;cursor:default;
+}
+@keyframes bounce{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(10px)}
+}
+
+/* ---- Sections ---- */
+.section{
+  opacity:0;transform:translateY(30px);
+  transition:opacity var(--transition-slow),transform var(--transition-slow);
+  padding:6rem 2rem;max-width:var(--max-width);margin:0 auto;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+.section-title{
+  font-size:clamp(2rem,5vw,3.5rem);font-weight:700;
+  text-align:center;margin-bottom:3rem;letter-spacing:-0.02em;
+  position:relative;padding-bottom:0.75rem;
+}
+.section-title::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:60px;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,var(--neon-cyan),var(--neon-purple));
+}
+
+/* ---- Game Cards ---- */
+.game-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:2rem;
+}
+.game-card{
+  overflow:hidden;
+  transition:transform var(--transition-medium),box-shadow var(--transition-medium);
+}
+.game-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,229,255,0.12);
+}
+.game-card-image{
+  aspect-ratio:16/9;overflow:hidden;
+  border-radius:var(--radius) var(--radius) 0 0;
+  background:rgba(255,255,255,0.03);
+}
+.game-card-image img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform var(--transition-slow);
+}
+.game-card:hover .game-card-image img{transform:scale(1.05)}
+.game-card-body{padding:1.75rem}
+.game-card-body h3{
+  font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;color:var(--text-primary);
+}
+.game-card-body p{
+  font-size:0.95rem;color:var(--text-secondary);margin-bottom:1rem;
+}
+.game-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.tag{
+  padding:4px 12px;font-size:0.75rem;font-weight:500;
+  border-radius:100px;background:rgba(0,229,255,0.1);
+  color:var(--neon-cyan);border:1px solid rgba(0,229,255,0.2);
+}
+.game-link{
+  color:var(--neon-purple);text-decoration:none;
+  font-weight:600;font-size:0.9rem;transition:color 150ms ease;
+}
+.game-link:hover{color:var(--neon-magenta)}
+
+/* ---- About ---- */
+.about-panel{padding:3rem;max-width:900px;margin:0 auto}
+.about-content{
+  display:grid;grid-template-columns:1.5fr 1fr;gap:3rem;align-items:start;
+}
+.about-text p{margin-bottom:1rem;color:var(--text-secondary)}
+.about-stats{display:flex;flex-direction:column;gap:1.5rem}
+.stat{padding:1.25rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm)}
+.stat-number{display:block;font-size:2rem;font-weight:800;
+  background:linear-gradient(135deg,var(--neon-cyan),var(--neon-green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.skill-badges{
+  display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:2.5rem;
+  padding-top:2rem;border-top:1px solid var(--glass-border);
+}
+.badge{
+  padding:6px 16px;font-size:0.8rem;font-weight:500;
+  border-radius:100px;background:rgba(139,0,255,0.12);
+  color:var(--neon-purple);border:1px solid rgba(139,0,255,0.2);
+}
+
+/* ---- Contact ---- */
+.contact-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.contact-card{
+  display:flex;flex-direction:column;align-items:center;gap:0.75rem;
+  padding:2rem 2.5rem;text-decoration:none;min-width:160px;
+  transition:all var(--transition-medium);
+}
+.contact-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(139,0,255,0.2);
+  border-color:var(--neon-purple);
+}
+.contact-icon{font-size:2rem;line-height:1}
+.contact-label{
+  font-size:0.9rem;font-weight:600;color:var(--text-secondary);
+  transition:color var(--transition-medium);
+}
+.contact-card:hover .contact-label{color:var(--neon-cyan)}
+
+/* ---- Footer ---- */
+.footer{
+  text-align:center;padding:3rem 2rem;
+  color:var(--text-muted);font-size:0.85rem;
+}
+
+/* ---- WebGL Fallback ---- */
+.webgl-fallback{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:0;background:var(--bg-deep);
+  animation:fallbackPulse 8s ease-in-out infinite;
+}
+@keyframes fallbackPulse{
+  0%,100%{background:radial-gradient(ellipse at 30% 50%,rgba(0,229,255,0.08),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(139,0,255,0.08),transparent 60%),var(--bg-deep)}
+  33%{background:radial-gradient(ellipse at 70% 70%,rgba(255,0,229,0.08),transparent 60%),radial-gradient(ellipse at 30% 30%,rgba(0,229,255,0.08),transparent 60%),var(--bg-deep)}
+  66%{background:radial-gradient(ellipse at 40% 60%,rgba(139,0,255,0.08),transparent 60%),radial-gradient(ellipse at 60% 40%,rgba(255,0,229,0.08),transparent 60%),var(--bg-deep)}
+}
+
+/* ---- Responsive ---- */
+@media(max-width:1024px){
+  .about-content{grid-template-columns:1fr;gap:2rem}
+}
+@media(max-width:768px){
+  :root{--nav-height:56px}
+  .navbar{top:8px;width:calc(100% - 16px);padding:0 1.25rem}
+  .nav-links{
+    display:none;position:absolute;top:calc(100% + 8px);
+    left:0;right:0;flex-direction:column;gap:0;
+    background:rgba(8,8,24,0.95);backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--glass-border);border-radius:var(--radius);
+    overflow:hidden;padding:0.5rem 0;
+  }
+  .nav-links.nav-open{display:flex}
+  .nav-links a{display:block;padding:0.75rem 1.25rem;font-size:0.9rem}
+  .nav-toggle{display:block}
+  .game-grid{grid-template-columns:1fr}
+  .section{padding:4rem 1.25rem}
+  .about-panel{padding:1.75rem}
+  .hero{padding:1.5rem}
+  .contact-card{padding:1.5rem 2rem;min-width:140px}
+  .glass-panel{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,8,20,0.75)}
+  .glass-panel:hover{background:rgba(12,12,30,0.85)}
+}
+
+@media(max-width:480px){
+  .hero-cta{flex-direction:column;align-items:stretch}
+  .btn{text-align:center}
+  .about-panel{padding:1.25rem}
+  .skill-badges{gap:0.5rem}
+}
+
+	/* ---- Accessibility ---- */
+	@media(prefers-reduced-motion:reduce){
+	  *,*::before,*::after{
+	    animation-duration:0.01ms !important;
+	    animation-iteration-count:1 !important;
+	    transition-duration:0.01ms !important;
+	    scroll-behavior:auto !important;
+	  }
+	  #fluid-canvas{display:none}
+	  .webgl-fallback{display:block;animation:none}
+	  .section{opacity:1;transform:none}
+	}
+	</style>
+</head>
+<body>
+
+<canvas id="fluid-canvas" aria-hidden="true"></canvas>
+<div class="webgl-fallback" id="webgl-fallback" aria-hidden="true"></div>
+
+<div class="app">
+
+  <nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo">SONDER</a>
+    <ul class="nav-links">
+      <li><a href="#games">Games</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </nav>
+
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <h1 class="hero-name">Sonder</h1>
+      <p class="hero-role">Indie Game Developer</p>
+      <p class="hero-tagline">Building immersive worlds at the intersection of code and art</p>
+      <div class="hero-cta">
+        <a href="#games" class="btn btn-primary">View Games</a>
+        <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+    <div class="scroll-indicator" aria-hidden="true">↓</div>
+  </section>
+
+  <section id="games" class="section">
+    <h2 class="section-title">Games</h2>
+    <div class="game-grid">
+      <article class="game-card glass-panel">
+        <div class="game-card-image">
+          <img src="https://placehold.co/600x340/1a1a2e/00e5ff?text=Sonder+Engine+Demo" alt="Sonder Engine Demo screenshot" loading="lazy">
+        </div>
+        <div class="game-card-body">
+          <h3>Sonder Engine</h3>
+          <p>A custom game built with Unity featuring innovative conveyor-belt mechanics and puzzle-solving gameplay.</p>
+          <div class="game-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Puzzle</span>
+            <span class="tag">3D</span>
+          </div>
+          <a href="#" class="game-link">Learn More →</a>
+        </div>
+      </article>
+
+      <article class="game-card glass-panel">
+        <div class="game-card-image">
+          <img src="https://placehold.co/600x340/1a1a2e/ff00e5?text=Loop+Bullet" alt="Loop Bullet screenshot" loading="lazy">
+        </div>
+        <div class="game-card-body">
+          <h3>Loop Bullet</h3>
+          <p>Fast-paced bullet-hell roguelite with looping mechanics. Dodge, weave, and master the loop.</p>
+          <div class="game-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Action</span>
+            <span class="tag">Roguelite</span>
+          </div>
+          <a href="#" class="game-link">Learn More →</a>
+        </div>
+      </article>
+
+      <article class="game-card glass-panel">
+        <div class="game-card-image">
+          <img src="https://placehold.co/600x340/1a1a2e/8b00ff?text=Project+3" alt="Upcoming project screenshot" loading="lazy">
+        </div>
+        <div class="game-card-body">
+          <h3>Project Nexus</h3>
+          <p>An atmospheric exploration game set in a procedurally generated world. Coming soon.</p>
+          <div class="game-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">Exploration</span>
+            <span class="tag">Procedural</span>
+          </div>
+          <a href="#" class="game-link">Wishlist →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="glass-panel about-panel">
+      <h2 class="section-title">About</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>I'm <strong>Sonder</strong>, an indie game developer passionate about creating unique, emotionally resonant experiences. I build games using Unity, focusing on tight mechanics, atmospheric design, and procedural generation.</p>
+          <p>When I'm not wrangling game objects, I'm diving into shader programming, tool development, and pushing the boundaries of what indie games can achieve. Every project is a chance to blend technical craft with artistic vision.</p>
+          <p>I believe great games come from iteration, attention to detail, and a deep understanding of what makes play feel <em>good</em>.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-number">3+</span>
+            <span>Games in Development</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">5+</span>
+            <span>Years of Unity Experience</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">∞</span>
+            <span>Passion for Game Dev</span>
+          </div>
+        </div>
+      </div>
+      <div class="skill-badges">
+        <span class="badge">Unity Engine</span>
+        <span class="badge">C#</span>
+        <span class="badge">ShaderLab / HLSL</span>
+        <span class="badge">Game Design</span>
+        <span class="badge">Procedural Generation</span>
+        <span class="badge">WebGL</span>
+        <span class="badge">HybridCLR</span>
+        <span class="badge">UI / UX</span>
+        <span class="badge">Performance Optimization</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-links">
+      <a href="mailto:sonder@example.com" class="contact-card glass-panel">
+        <span class="contact-icon" aria-hidden="true">✉</span>
+        <span class="contact-label">Email</span>
+      </a>
+      <a href="https://github.com/ALEXTANGXIAO" target="_blank" rel="noopener" class="contact-card glass-panel">
+        <span class="contact-icon" aria-hidden="true">⌨</span>
+        <span class="contact-label">GitHub</span>
+      </a>
+      <a href="#" class="contact-card glass-panel">
+        <span class="contact-icon" aria-hidden="true">🎮</span>
+        <span class="contact-label">itch.io</span>
+      </a>
+      <a href="#" class="contact-card glass-panel">
+        <span class="contact-icon" aria-hidden="true">𝕏</span>
+        <span class="contact-label">Twitter / X</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2026 Sonder. Built with code, art, and way too much caffeine.</p>
+  </footer>
+</div>
+
+<!-- ============================================================
+     GLSL SHADERS (WebGL 2 — GLSL ES 3.00)
+     ============================================================ -->
+<script type="x-shader/x-vertex" id="vs-quad">
+#version 300 es
+precision highp float;
+in vec2 aPosition;
+in vec2 aTexCoord;
+out vec2 vUv;
+void main() {
+    vUv = aTexCoord;
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-advection">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uQuantity;
+uniform sampler2D uVelocity;
+uniform float uDt;
+uniform float uDissipation;
+void main() {
+    vec2 vel = texture(uVelocity, vUv).xy;
+    vec2 backPos = vUv - vel * uDt;
+    vec4 qty = texture(uQuantity, backPos);
+    fragColor = qty * uDissipation;
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-divergence">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+uniform float uDx;
+void main() {
+    float dx = uDx;
+    vec2 vL = texture(uVelocity, vUv - vec2(dx, 0.0)).xy;
+    vec2 vR = texture(uVelocity, vUv + vec2(dx, 0.0)).xy;
+    vec2 vB = texture(uVelocity, vUv - vec2(0.0, dx)).xy;
+    vec2 vT = texture(uVelocity, vUv + vec2(0.0, dx)).xy;
+    float div = (vR.x - vL.x + vT.y - vB.y) / (2.0 * dx);
+    fragColor = vec4(div, 0.0, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-pressure">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uPressure;
+uniform sampler2D uDivergence;
+uniform float uDx;
+void main() {
+    float dx = uDx;
+    float pL = texture(uPressure, vUv - vec2(dx, 0.0)).r;
+    float pR = texture(uPressure, vUv + vec2(dx, 0.0)).r;
+    float pB = texture(uPressure, vUv - vec2(0.0, dx)).r;
+    float pT = texture(uPressure, vUv + vec2(0.0, dx)).r;
+    float div = texture(uDivergence, vUv).r;
+    float pNew = (pL + pR + pB + pT - dx * dx * div) / 4.0;
+    fragColor = vec4(pNew, 0.0, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-gradient">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+uniform sampler2D uPressure;
+uniform float uDx;
+void main() {
+    float dx = uDx;
+    vec2 vel = texture(uVelocity, vUv).xy;
+    float pL = texture(uPressure, vUv - vec2(dx, 0.0)).r;
+    float pR = texture(uPressure, vUv + vec2(dx, 0.0)).r;
+    float pB = texture(uPressure, vUv - vec2(0.0, dx)).r;
+    float pT = texture(uPressure, vUv + vec2(0.0, dx)).r;
+    vel.x -= (pR - pL) / (2.0 * dx);
+    vel.y -= (pT - pB) / (2.0 * dx);
+    fragColor = vec4(vel, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-vorticity">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uVelocity;
+uniform float uDx;
+uniform float uCurlStrength;
+
+float getCurl(vec2 uv, float dx) {
+    vec2 vL = texture(uVelocity, uv - vec2(dx, 0.0)).xy;
+    vec2 vR = texture(uVelocity, uv + vec2(dx, 0.0)).xy;
+    vec2 vB = texture(uVelocity, uv - vec2(0.0, dx)).xy;
+    vec2 vT = texture(uVelocity, uv + vec2(0.0, dx)).xy;
+    return (vR.y - vL.y - vT.x + vB.x) / (2.0 * dx);
+}
+
+void main() {
+    float dx = uDx;
+    vec2 vel = texture(uVelocity, vUv).xy;
+
+    // Curl at center
+    float curl = getCurl(vUv, dx);
+
+    // |curl| at 4 neighbors for gradient estimation
+    float curlL = abs(getCurl(vUv - vec2(dx, 0.0), dx));
+    float curlR = abs(getCurl(vUv + vec2(dx, 0.0), dx));
+    float curlB = abs(getCurl(vUv - vec2(0.0, dx), dx));
+    float curlT = abs(getCurl(vUv + vec2(0.0, dx), dx));
+
+    // Gradient of |curl| via central differences
+    float gradX = (curlR - curlL) / (2.0 * dx);
+    float gradY = (curlT - curlB) / (2.0 * dx);
+
+    // Vorticity confinement: force perpendicular to grad(|curl|), scaled by curl
+    vec2 force = vec2(0.0);
+    float gradLen = length(vec2(gradX, gradY));
+    if (gradLen > 0.0001) {
+        vec2 N = vec2(gradX, gradY) / gradLen;
+        force = uCurlStrength * dx * vec2(N.y * curl, -N.x * curl);
+    }
+
+    fragColor = vec4(vel + force, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-splat-dye">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform vec2 uSplatPos;
+uniform vec3 uSplatColor;
+uniform float uSplatRadius;
+uniform float uSplatStrength;
+void main() {
+    float dist = length(vUv - uSplatPos);
+    float weight = exp(-dist * dist / (uSplatRadius * uSplatRadius)) * uSplatStrength;
+    fragColor = vec4(uSplatColor * weight, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-splat-vel">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform vec2 uSplatPos;
+uniform vec2 uSplatVelocity;
+uniform float uSplatRadius;
+uniform float uSplatStrength;
+void main() {
+    float dist = length(vUv - uSplatPos);
+    float weight = exp(-dist * dist / (uSplatRadius * uSplatRadius)) * uSplatStrength;
+    fragColor = vec4(uSplatVelocity * weight, 0.0, 1.0);
+}
+</script>
+
+<script type="x-shader/x-fragment" id="fs-display">
+#version 300 es
+precision highp float;
+in vec2 vUv;
+out vec4 fragColor;
+uniform sampler2D uDye;
+uniform float uTime;
+uniform vec2 uResolution;
+// Hash function for grain
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+void main() {
+    vec4 dye = texture(uDye, vUv);
+
+    // Dark background with subtle purple-blue tint
+    vec3 bg = vec3(0.015, 0.008, 0.03);
+
+    // Amplify dye contribution for glow
+    vec3 color = bg + dye.rgb * 1.8;
+
+    // Enhanced glow in brighter areas
+    float intensity = dot(dye.rgb, vec3(0.299, 0.587, 0.114));
+    color += dye.rgb * intensity * 1.5;
+
+    // Subtle bloom-like haloing
+    vec4 dyeR = texture(uDye, vUv + vec2(0.001, 0.0));
+    vec4 dyeL = texture(uDye, vUv - vec2(0.001, 0.0));
+    vec4 dyeT = texture(uDye, vUv + vec2(0.0, 0.001));
+    vec4 dyeB = texture(uDye, vUv - vec2(0.0, 0.001));
+    vec3 bloom = (dyeR.rgb + dyeL.rgb + dyeT.rgb + dyeB.rgb) * 0.15;
+    color += bloom;
+
+    // Vignette
+    float vignette = 1.0 - length(vUv - 0.5) * 1.25;
+    vignette = smoothstep(0.0, 1.0, vignette);
+    color *= mix(vignette, 1.0, 0.3); // subtle vignette
+
+    // Subtle film grain
+    float grain = hash(vUv * uResolution + uTime) * 0.025;
+    color += grain;
+
+    // Subtle chromatic aberration at edges
+    float edgeDist = length(vUv - 0.5);
+    if (edgeDist > 0.35) {
+        float ca = (edgeDist - 0.35) * 0.02;
+        color.r += ca;
+        color.b -= ca;
+    }
+
+    // Reinhard tone mapping
+    color = color / (color + vec3(1.0));
+
+    fragColor = vec4(color, 1.0);
+}
+</script>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function() {
+'use strict';
+
+// ============================================================
+// UTILITY
+// ============================================================
+function getShaderSource(id) {
+    return document.getElementById(id).textContent.trim();
+}
+
+// ============================================================
+// FLUID SIMULATION (WebGL 2)
+// ============================================================
+class FluidSimulation {
+    constructor(canvas, config = {}) {
+        this.canvas = canvas;
+        this.config = Object.assign({
+            gridSize: 256,
+            dyeDissipation: 0.997,
+            velDissipation: 0.995,
+            pressureIterations: 20,
+            curlStrength: 1.8,
+            splatRadius: 0.012,
+            splatStrength: 0.8,
+        }, config);
+
+        this.splatQueue = [];
+        this.clock = 0;
+        this._initWebGL();
+        this._initGeometry();
+        this._initTextures();
+        this._initPrograms();
+    }
+
+    _initWebGL() {
+        const gl = this.canvas.getContext('webgl2', {
+            alpha: false,
+            antialias: false,
+            preserveDrawingBuffer: false,
+            powerPreference: 'high-performance',
+        });
+
+        if (!gl) {
+            throw new Error('WebGL 2 not available');
+        }
+
+        this.gl = gl;
+        this.ext = {
+            colorBufferFloat: gl.getExtension('EXT_color_buffer_float'), // may be null, but WebGL2 supports float FBOs natively
+        };
+
+        gl.clearColor(0, 0, 0, 1);
+        gl.disable(gl.DEPTH_TEST);
+        gl.disable(gl.STENCIL_TEST);
+    }
+
+    _initGeometry() {
+        const gl = this.gl;
+        // Full-screen quad: 2 triangles covering clip space, with UVs
+        const vertices = new Float32Array([
+            // x,   y,    u,   v
+            -1, -1,     0,  0,
+             1, -1,     1,  0,
+            -1,  1,     0,  1,
+            -1,  1,     0,  1,
+             1, -1,     1,  0,
+             1,  1,     1,  1,
+        ]);
+
+        this.quadBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        this.quadVertexCount = 6;
+    }
+
+    _initTextures() {
+        const gl = this.gl;
+        const N = this.config.gridSize;
+
+        const createTex = (internalFormat, format, type, filtering) => {
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filtering || gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filtering || gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, N, N, 0, format, type, null);
+
+            const fb = gl.createFramebuffer();
+            gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+            return { texture, fb };
+        };
+
+        // Velocity textures (float for precision)
+        this.velTex = [createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT), createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT)];
+        // Dye textures
+        this.dyeTex = [createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT), createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT)];
+        // Pressure textures
+        this.pressureTex = [createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT), createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT)];
+        // Divergence texture
+        this.divergence = createTex(gl.RGBA32F, gl.RGBA, gl.FLOAT);
+
+        this.readIdx = { vel: 0, dye: 0, pressure: 0 };
+    }
+
+    _compileShader(type, source) {
+        const gl = this.gl;
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            const info = gl.getShaderInfoLog(shader);
+            gl.deleteShader(shader);
+            throw new Error('Shader compile error: ' + info + '\nSource:\n' + source.substring(0, 500));
+        }
+        return shader;
+    }
+
+    _createProgram(vsSrc, fsSrc) {
+        const gl = this.gl;
+        const vs = this._compileShader(gl.VERTEX_SHADER, vsSrc);
+        const fs = this._compileShader(gl.FRAGMENT_SHADER, fsSrc);
+        const program = gl.createProgram();
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            const info = gl.getProgramInfoLog(program);
+            gl.deleteProgram(program);
+            throw new Error('Program link error: ' + info);
+        }
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        return program;
+    }
+
+    _initPrograms() {
+        const gl = this.gl;
+        const vs = getShaderSource('vs-quad');
+
+        const PROGRAM_DEFS = {
+            advection:   { fs: getShaderSource('fs-advection'),   uniforms: ['uQuantity','uVelocity','uDt','uDissipation'] },
+            divergence:  { fs: getShaderSource('fs-divergence'),  uniforms: ['uVelocity','uDx'] },
+            pressure:    { fs: getShaderSource('fs-pressure'),    uniforms: ['uPressure','uDivergence','uDx'] },
+            gradient:    { fs: getShaderSource('fs-gradient'),    uniforms: ['uVelocity','uPressure','uDx'] },
+            vorticity:   { fs: getShaderSource('fs-vorticity'),   uniforms: ['uVelocity','uDx','uCurlStrength'] },
+            splatDye:    { fs: getShaderSource('fs-splat-dye'),   uniforms: ['uSplatPos','uSplatColor','uSplatRadius','uSplatStrength'] },
+            splatVel:    { fs: getShaderSource('fs-splat-vel'),   uniforms: ['uSplatPos','uSplatVelocity','uSplatRadius','uSplatStrength'] },
+            display:     { fs: getShaderSource('fs-display'),     uniforms: ['uDye','uTime','uResolution'] },
+        };
+
+        this.programs = {};
+        this.cachedUniforms = {};
+        this.cachedAttribs = {};
+
+        for (const [name, def] of Object.entries(PROGRAM_DEFS)) {
+            const program = this._createProgram(vs, def.fs);
+            this.programs[name] = program;
+
+            const ulocs = {};
+            for (const uname of def.uniforms) {
+                const loc = gl.getUniformLocation(program, uname);
+                if (loc !== null) ulocs[uname] = loc;
+            }
+            this.cachedUniforms[name] = ulocs;
+
+            this.cachedAttribs[name] = {
+                aPosition: gl.getAttribLocation(program, 'aPosition'),
+                aTexCoord: gl.getAttribLocation(program, 'aTexCoord'),
+            };
+        }
+    }
+
+    _blit(programName, uniforms, targetFb, viewportW, viewportH) {
+        const gl = this.gl;
+        const program = this.programs[programName];
+        const ulocs = this.cachedUniforms[programName];
+        const attribs = this.cachedAttribs[programName];
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, targetFb);
+        gl.viewport(0, 0, viewportW || this.config.gridSize, viewportH || this.config.gridSize);
+        gl.useProgram(program);
+
+        let texUnit = 0;
+        for (const [name, value] of Object.entries(uniforms)) {
+            const loc = ulocs[name];
+            if (loc === undefined) continue; // uniform may be optimized out
+
+            if (value instanceof WebGLTexture) {
+                gl.activeTexture(gl.TEXTURE0 + texUnit);
+                gl.bindTexture(gl.TEXTURE_2D, value);
+                gl.uniform1i(loc, texUnit);
+                texUnit++;
+            } else if (Array.isArray(value)) {
+                if (value.length === 2) gl.uniform2f(loc, value[0], value[1]);
+                else if (value.length === 3) gl.uniform3f(loc, value[0], value[1], value[2]);
+                else if (value.length === 4) gl.uniform4f(loc, value[0], value[1], value[2], value[3]);
+            } else {
+                gl.uniform1f(loc, value);
+            }
+        }
+
+        // Bind vertex attributes (cached)
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.quadBuffer);
+        const posLoc = attribs.aPosition;
+        const uvLoc = attribs.aTexCoord;
+
+        if (posLoc >= 0) {
+            gl.enableVertexAttribArray(posLoc);
+            gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 16, 0);
+        }
+        if (uvLoc >= 0) {
+            gl.enableVertexAttribArray(uvLoc);
+            gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 16, 8);
+        }
+
+        gl.drawArrays(gl.TRIANGLES, 0, this.quadVertexCount);
+
+        // Cleanup
+        if (posLoc >= 0) gl.disableVertexAttribArray(posLoc);
+        if (uvLoc >= 0) gl.disableVertexAttribArray(uvLoc);
+    }
+
+    _swap(name) {
+        this.readIdx[name] = 1 - this.readIdx[name];
+    }
+
+    _getTex(name, offset = 0) {
+        const idx = (this.readIdx[name] + offset) % 2;
+        if (name === 'vel') return this.velTex[idx];
+        if (name === 'dye') return this.dyeTex[idx];
+        if (name === 'pressure') return this.pressureTex[idx];
+    }
+
+    _getFb(name, offset = 0) {
+        return this._getTex(name, offset).fb;
+    }
+
+    _getTexObj(name, offset = 0) {
+        return this._getTex(name, offset).texture;
+    }
+
+    splat(x, y, dx, dy) {
+        const margin = this.config.splatRadius * 3;
+        x = Math.max(margin, Math.min(1.0 - margin, x));
+        y = Math.max(margin, Math.min(1.0 - margin, y));
+        this.splatQueue.push({ x, y, dx, dy });
+    }
+
+    _applySplats() {
+        if (this.splatQueue.length === 0) return;
+
+        const gl = this.gl;
+        const N = this.config.gridSize;
+
+        // Enable additive blending
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE);
+
+        for (const s of this.splatQueue) {
+            // Splat dye
+            const dyeFb = this._getFb('dye');
+            this._blit('splatDye', {
+                uSplatPos: [s.x, s.y],
+                uSplatColor: this._currentSplatColor(),
+                uSplatRadius: this.config.splatRadius,
+                uSplatStrength: this.config.splatStrength,
+            }, dyeFb, N, N);
+
+            // Splat velocity if moving
+            const speed = Math.sqrt(s.dx * s.dx + s.dy * s.dy);
+            if (speed > 0.0005) {
+                const velFb = this._getFb('vel');
+                this._blit('splatVel', {
+                    uSplatPos: [s.x, s.y],
+                    uSplatVelocity: [s.dx, s.dy],
+                    uSplatRadius: this.config.splatRadius * 1.5,
+                    uSplatStrength: Math.min(speed * 0.5, this.config.splatStrength),
+                }, velFb, N, N);
+            }
+        }
+
+        this.splatQueue = [];
+
+        // Restore default blend
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+        gl.disable(gl.BLEND);
+    }
+
+    _currentSplatColor() {
+        // Cycle through neon colors over time
+        const t = this.clock * 0.4;
+        const palette = [
+            [0.0, 0.9, 1.0],    // cyan
+            [1.0, 0.0, 0.9],    // magenta
+            [0.55, 0.0, 1.0],   // purple
+            [0.0, 1.0, 0.53],   // green
+            [0.0, 0.7, 1.0],    // blue
+        ];
+        const idx = Math.floor(t) % palette.length;
+        const next = (idx + 1) % palette.length;
+        const frac = t - Math.floor(t);
+        return [
+            palette[idx][0] + (palette[next][0] - palette[idx][0]) * frac,
+            palette[idx][1] + (palette[next][1] - palette[idx][1]) * frac,
+            palette[idx][2] + (palette[next][2] - palette[idx][2]) * frac,
+        ];
+    }
+
+    step(dt) {
+        const gl = this.gl;
+        const N = this.config.gridSize;
+        const dx = 1.0 / N;
+        const numIter = this.config.pressureIterations;
+
+        // Clamp dt for stability
+        dt = Math.min(dt, 0.033);
+
+        // ---- 1. Apply splats ----
+        this._applySplats();
+
+        // ---- 2. Vorticity confinement ----
+        this._blit('vorticity', {
+            uVelocity: this._getTexObj('vel'),
+            uDx: dx,
+            uCurlStrength: this.config.curlStrength,
+        }, this._getFb('vel', 1), N, N);
+        this._swap('vel');
+
+        // ---- 3. Advect velocity ----
+        this._blit('advection', {
+            uQuantity: this._getTexObj('vel'),
+            uVelocity: this._getTexObj('vel'),
+            uDt: dt,
+            uDissipation: this.config.velDissipation,
+        }, this._getFb('vel', 1), N, N);
+        this._swap('vel');
+
+        // ---- 4. Compute divergence ----
+        this._blit('divergence', {
+            uVelocity: this._getTexObj('vel'),
+            uDx: dx,
+        }, this.divergence.fb, N, N);
+
+        // ---- 5. Pressure solve (Jacobi iteration) ----
+        for (let i = 0; i < numIter; i++) {
+            this._blit('pressure', {
+                uPressure: this._getTexObj('pressure', i % 2),
+                uDivergence: this.divergence.texture,
+                uDx: dx,
+            }, this._getFb('pressure', (i + 1) % 2), N, N);
+        }
+        this.readIdx.pressure = numIter % 2;
+
+        // ---- 6. Subtract pressure gradient ----
+        this._blit('gradient', {
+            uVelocity: this._getTexObj('vel'),
+            uPressure: this._getTexObj('pressure'),
+            uDx: dx,
+        }, this._getFb('vel', 1), N, N);
+        this._swap('vel');
+
+        // ---- 7. Advect dye ----
+        this._blit('advection', {
+            uQuantity: this._getTexObj('dye'),
+            uVelocity: this._getTexObj('vel'),
+            uDt: dt,
+            uDissipation: this.config.dyeDissipation,
+        }, this._getFb('dye', 1), N, N);
+        this._swap('dye');
+    }
+
+    render() {
+        const gl = this.gl;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+
+        this._blit('display', {
+            uDye: this._getTexObj('dye'),
+            uTime: this.clock,
+            uResolution: [w, h],
+        }, null, w, h); // null = render to screen
+    }
+
+    resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.floor(window.innerWidth * dpr);
+        const h = Math.floor(window.innerHeight * dpr);
+
+        if (this.canvas.width !== w || this.canvas.height !== h) {
+            this.canvas.width = w;
+            this.canvas.height = h;
+        }
+    }
+
+    destroy() {
+        const gl = this.gl;
+        // Delete all textures
+        const allTex = [
+            ...this.velTex, ...this.dyeTex, ...this.pressureTex,
+            this.divergence,
+        ];
+        for (const t of allTex) {
+            gl.deleteTexture(t.texture);
+            gl.deleteFramebuffer(t.fb);
+        }
+        gl.deleteBuffer(this.quadBuffer);
+        for (const p of Object.values(this.programs)) {
+            gl.deleteProgram(p);
+        }
+        // Lose context
+        const ext = gl.getExtension('WEBGL_lose_context');
+        if (ext) ext.loseContext();
+    }
+}
+
+// ============================================================
+// APP CONTROLLER
+// ============================================================
+class App {
+    constructor() {
+        this.canvas = document.getElementById('fluid-canvas');
+        this.fallbackEl = document.getElementById('webgl-fallback');
+        this.mouse = { x: 0.5, y: 0.5, prevX: 0.5, prevY: 0.5, down: false, active: false };
+        this.lastTime = performance.now();
+        this.idleTime = 0;
+        this.idleSplatInterval = 8; // seconds between auto-splats
+
+        try {
+            this.fluid = new FluidSimulation(this.canvas, {
+                gridSize: this._isMobile() ? 128 : 256,
+                pressureIterations: this._isMobile() ? 6 : 20,
+                splatRadius: this._isMobile() ? 0.022 : 0.013,
+                splatStrength: this._isMobile() ? 1.0 : 0.75,
+                curlStrength: this._isMobile() ? 1.5 : 2.0,
+            });
+            this.canvas.style.display = '';
+        } catch (e) {
+            console.warn('WebGL 2 not available, using fallback background. Error:', e.message);
+            this.fluid = null;
+            this.canvas.style.display = 'none';
+            this.fallbackEl.style.display = 'block';
+        }
+
+        this._bindEvents();
+        if (this.fluid) {
+            this.fluid.resize();
+            this._seedInitialSplats();
+            this._animate(performance.now());
+        }
+    }
+
+    _seedInitialSplats() {
+        // Seed the simulation with initial color bursts for instant visual appeal
+        const seeds = [
+            { x: 0.3, y: 0.5, dx: 1.5, dy: 0.8 },
+            { x: 0.7, y: 0.4, dx: -1.2, dy: 1.0 },
+            { x: 0.5, y: 0.6, dx: 2.0, dy: -0.5 },
+            { x: 0.25, y: 0.35, dx: 0.8, dy: -1.5 },
+            { x: 0.65, y: 0.7, dx: -1.8, dy: -0.3 },
+        ];
+        for (const s of seeds) {
+            this.fluid.splat(s.x, s.y, s.dx, s.dy);
+        }
+        // Run a few simulation steps to spread the dye
+        for (let i = 0; i < 10; i++) {
+            this.fluid.clock += 0.016;
+            this.fluid.step(0.016);
+        }
+    }
+
+    _isMobile() {
+        return window.innerWidth < 768 || ('ontouchstart' in window && window.innerWidth < 1024);
+    }
+
+    _bindEvents() {
+        // Mouse
+        this.canvas.addEventListener('mousemove', (e) => this._onMouseMove(e));
+        this.canvas.addEventListener('mousedown', (e) => {
+            this.mouse.down = true;
+            this.mouse.active = true;
+            this.mouse.prevX = e.clientX / window.innerWidth;
+            this.mouse.prevY = 1.0 - e.clientY / window.innerHeight;
+        });
+        window.addEventListener('mouseup', () => { this.mouse.down = false; });
+        window.addEventListener('blur', () => { this.mouse.down = false; });
+
+        // Touch
+        this.canvas.addEventListener('touchstart', (e) => this._onTouchStart(e), { passive: false });
+        this.canvas.addEventListener('touchmove', (e) => this._onTouchMove(e), { passive: false });
+        this.canvas.addEventListener('touchend', () => { this.mouse.down = false; });
+
+        // Resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (this.fluid) this.fluid.resize();
+            }, 200);
+        });
+
+        // Tab visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(this.rafId);
+            } else {
+                this.lastTime = performance.now();
+                this._animate(this.lastTime);
+            }
+        });
+
+        // WebGL context loss
+        this.canvas.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            cancelAnimationFrame(this.rafId);
+            this.fallbackEl.style.display = 'block';
+            this.canvas.style.display = 'none';
+        });
+        this.canvas.addEventListener('webglcontextrestored', () => {
+            // All WebGL resources were lost — recreate the fluid sim
+            if (this.fluid) this.fluid.destroy();
+            try {
+                this.fluid = new FluidSimulation(this.canvas, {
+                    gridSize: this._isMobile() ? 128 : 256,
+                    pressureIterations: this._isMobile() ? 6 : 20,
+                    splatRadius: this._isMobile() ? 0.022 : 0.013,
+                    splatStrength: this._isMobile() ? 1.0 : 0.75,
+                    curlStrength: this._isMobile() ? 1.5 : 2.0,
+                });
+                this.fluid.resize();
+                this._seedInitialSplats();
+                this.fallbackEl.style.display = 'none';
+                this.canvas.style.display = '';
+                this.lastTime = performance.now();
+                this._animate(this.lastTime);
+            } catch (e) {
+                console.warn('WebGL context restored but reinit failed:', e.message);
+                // Page reload as last resort
+                window.location.reload();
+            }
+        });
+
+        // Scroll animations
+        this._setupScrollAnimations();
+
+        // Mobile nav
+        this._setupMobileNav();
+
+        // Smooth scroll for nav links with offset
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    const navHeight = 80;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+    }
+
+    _onMouseMove(e) {
+        const x = e.clientX / window.innerWidth;
+        const y = 1.0 - e.clientY / window.innerHeight;
+        this.mouse.prevX = this.mouse.x;
+        this.mouse.prevY = this.mouse.y;
+        this.mouse.x = x;
+        this.mouse.y = y;
+
+        if (this.mouse.down && this.fluid) {
+            const dx = (x - this.mouse.prevX) * 60;
+            const dy = (y - this.mouse.prevY) * 60;
+            this.fluid.splat(x, y, dx, dy);
+            this.idleTime = 0;
+            this.mouse.active = true;
+        }
+    }
+
+    _onTouchStart(e) {
+        e.preventDefault();
+        this.mouse.down = true;
+        this.mouse.active = true;
+        if (e.touches.length > 0) {
+            this.mouse.prevX = e.touches[0].clientX / window.innerWidth;
+            this.mouse.prevY = 1.0 - e.touches[0].clientY / window.innerHeight;
+        }
+    }
+
+    _onTouchMove(e) {
+        e.preventDefault();
+        if (e.touches.length > 0 && this.fluid) {
+            const x = e.touches[0].clientX / window.innerWidth;
+            const y = 1.0 - e.touches[0].clientY / window.innerHeight;
+            if (this.mouse.down) {
+                const dx = (x - this.mouse.prevX) * 60;
+                const dy = (y - this.mouse.prevY) * 60;
+                this.fluid.splat(x, y, dx, dy);
+                this.idleTime = 0;
+            }
+            this.mouse.prevX = x;
+            this.mouse.prevY = y;
+        }
+    }
+
+    _animate(timestamp) {
+        if (!this.fluid) return;
+
+        const dt = Math.min((timestamp - this.lastTime) / 1000, 0.033);
+        this.lastTime = timestamp;
+
+        this.fluid.clock += dt;
+        this.fluid.step(dt);
+
+        // Idle auto-splats to keep the background alive
+        this.idleTime += dt;
+        if (this.idleTime > this.idleSplatInterval) {
+            this.idleTime = 0;
+            // Splat at a random position with a gentle velocity
+            const x = 0.2 + Math.random() * 0.6;
+            const y = 0.2 + Math.random() * 0.6;
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 0.5 + Math.random() * 2;
+            this.fluid.splat(x, y, Math.cos(angle) * speed, Math.sin(angle) * speed);
+            // Occasionally add a second splat for more visual interest
+            if (Math.random() < 0.4) {
+                const x2 = 0.2 + Math.random() * 0.6;
+                const y2 = 0.2 + Math.random() * 0.6;
+                this.fluid.splat(x2, y2, Math.cos(angle + 1.5) * speed * 0.7, Math.sin(angle + 1.5) * speed * 0.7);
+            }
+        }
+
+        this.fluid.render();
+        this.rafId = requestAnimationFrame((t) => this._animate(t));
+    }
+
+    _setupScrollAnimations() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Hero is always visible on load
+        const hero = document.getElementById('hero');
+        if (hero && hero.classList.contains('section')) {
+            hero.classList.add('visible');
+        }
+    }
+
+    _setupMobileNav() {
+        const toggle = document.querySelector('.nav-toggle');
+        const links = document.querySelector('.nav-links');
+
+        toggle.addEventListener('click', () => {
+            const isOpen = links.classList.toggle('nav-open');
+            toggle.setAttribute('aria-expanded', isOpen);
+            toggle.textContent = isOpen ? '✕' : '☰';
+        });
+
+        links.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                links.classList.remove('nav-open');
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.textContent = '☰';
+            });
+        });
+    }
+}
+
+// ============================================================
+// ENTRY POINT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+    new App();
+});
+
+})();
+</script>
+</body>
+</html>

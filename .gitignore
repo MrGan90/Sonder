@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# CodeGraph (local dev tool)
+.codegraph/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
