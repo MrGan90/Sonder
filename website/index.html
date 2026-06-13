@@ -357,28 +357,66 @@ body{
 	/* ---- Game Detail (Full-Screen Page) ---- */
 .detail-page{position:fixed;inset:0;z-index:200;background:var(--bg-deep);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .detail-page[hidden]{display:none}
-.detail-back{position:sticky;top:0;z-index:10;display:inline-flex;align-items:center;gap:0.5rem;padding:1rem 1.5rem;margin:1rem 0 0 1rem;background:rgba(8,8,20,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:100px;color:var(--text-secondary);font-family:var(--font-sans);font-size:0.85rem;cursor:pointer;transition:all 200ms ease;width:fit-content}
+.detail-back{position:sticky;top:0;z-index:10;display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.25rem;margin:1rem 0 0 1.5rem;background:rgba(8,8,20,0.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:100px;color:var(--text-secondary);font-family:var(--font-sans);font-size:0.85rem;cursor:pointer;transition:all 200ms ease;width:fit-content}
 .detail-back:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);box-shadow:0 0 16px rgba(0,229,255,0.15)}
-.detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;min-height:0}
-.detail-hero{position:relative;overflow:hidden;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;padding:2rem}
-.detail-hero img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.detail-info{display:flex;flex-direction:column;justify-content:center;padding:3rem 3rem 3rem 1rem;overflow-y:auto}
+
+/* Content wrapper */
+.detail-content{max-width:900px;margin:0 auto;padding:1.5rem 2rem 3rem;width:100%}
+
+/* Hero image */
+.detail-hero{margin-bottom:2rem}
+.detail-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:block}
+
+/* Title + tags */
 .detail-title{font-size:2.25rem;font-weight:800;margin-bottom:0.75rem;color:var(--text-primary);letter-spacing:-0.02em}
-.detail-desc{color:var(--text-secondary);line-height:1.75;margin-bottom:1.75rem;font-size:1rem}
-.detail-platforms{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.detail-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+
+/* Description */
+.detail-desc{color:var(--text-secondary);line-height:1.8;margin-bottom:1.75rem;font-size:1rem;max-width:65ch}
+
+/* Platforms */
+.detail-platforms{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2rem}
 .detail-platforms span{display:flex;align-items:center;gap:0.4rem;padding:7px 16px;background:rgba(255,255,255,0.04);border-radius:100px;font-size:0.82rem;color:var(--text-secondary);border:1px solid var(--glass-border)}
-.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.75rem}
-.detail-stat{text-align:center;padding:1.25rem 0.5rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid var(--glass-border)}
-.detail-stat .stat-icon{font-size:1.25rem;display:block;margin-bottom:0.35rem}
-.detail-stat strong{display:block;font-size:1.2rem;color:var(--text-primary);margin-bottom:0.15rem}
+
+/* Trailer section */
+.detail-trailer-section{margin-bottom:2rem}
+.detail-trailer-section[hidden]{display:none}
+.detail-section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.75rem;text-align:center}
+.detail-trailer .trailer-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,0.4);background:rgba(0,0,0,0.3)}
+.detail-trailer .trailer-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+/* Stats grid */
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.detail-stat{text-align:center;padding:1.5rem 1rem;background:rgba(255,255,255,0.025);border-radius:var(--radius-sm);border:1px solid var(--glass-border);transition:border-color 200ms ease}
+.detail-stat:hover{border-color:var(--glass-border-hover)}
+.detail-stat .stat-icon{font-size:1.4rem;display:block;margin-bottom:0.4rem}
+.detail-stat strong{display:block;font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:0.15rem}
 .detail-stat .stat-label{font-size:0.78rem;color:var(--text-muted)}
-.detail-cta{display:block;text-align:center}
-.detail-trailer{padding:0 2rem 1.5rem}.trailer-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,0.4)}.trailer-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}.detail-screenshots{padding:2rem 2rem 1rem}
-.detail-screenshots-label{font-size:0.8rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.04em;text-transform:uppercase}
-.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.detail-screenshots-grid img{flex:0 0 auto;width:280px;height:175px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.detail-screenshots-grid img:hover{transform:scale(1.03)}
-.detail-footer{padding:1.5rem 2rem 3rem;text-align:center}
+
+/* CTA Button */
+.detail-cta-wrap{text-align:center;margin-bottom:2.5rem}
+.detail-cta{display:inline-block;padding:14px 48px;font-size:1rem}
+
+/* Screenshots */
+.detail-screenshots{margin-bottom:1rem}
+.detail-screenshots-label{font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.08em;text-transform:uppercase}
+.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.detail-screenshots-grid img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.detail-screenshots-grid img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+
+/* Detail responsive */
+@media(max-width:768px){
+  .detail-back{margin:0.5rem 0 0 0.75rem;padding:0.6rem 1rem;font-size:0.8rem}
+  .detail-content{padding:1rem 1.25rem 2rem}
+  .detail-hero img{border-radius:var(--radius-sm)}
+  .detail-title{font-size:1.5rem}
+  .detail-desc{font-size:0.95rem}
+  .detail-stats{gap:0.5rem}
+  .detail-stat{padding:1rem 0.5rem}
+  .detail-stat strong{font-size:1.1rem}
+  .detail-screenshots-grid img{width:220px;height:138px}
+  .detail-cta{padding:12px 32px;font-size:0.95rem}
+}
 
 /* ---- Back to Top ---- */
 .back-to-top{position:fixed;bottom:2rem;right:2rem;z-index:150;width:44px;height:44px;border-radius:50%;background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);color:var(--text-secondary);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition-medium),opacity 300ms ease,visibility 300ms ease;opacity:1;visibility:visible}
@@ -406,7 +444,7 @@ body{
   .detail-screenshots-grid img{width:200px;height:125px}
   .detail-footer{padding:1rem 1.5rem 2rem}
   .back-to-top{bottom:1.25rem;right:1.25rem;width:40px;height:40px}
-  .detail-trailer{padding:0 1.25rem 1rem}
+  .detail-trailer-section{margin-bottom:1.5rem}
 }
 
 /* ---- Accessibility ---- */
@@ -590,29 +628,31 @@ body{
   <button class="detail-back" aria-label="Back to games" data-i18n="detail.back">
     <span>←</span> <span>Back to Games</span>
   </button>
-  <div class="detail-layout">
+  <div class="detail-content">
     <div class="detail-hero">
       <img id="detail-hero-img" src="" alt="">
     </div>
-    <div class="detail-trailer" id="detail-trailer" hidden>
-      <div class="trailer-container">
-        <iframe src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    <h2 class="detail-title" id="detail-title"></h2>
+    <div class="detail-tags" id="detail-tags"></div>
+    <p class="detail-desc" id="detail-desc"></p>
+    <div class="detail-platforms" id="detail-platforms"></div>
+    <div class="detail-trailer-section" id="detail-trailer-section" hidden>
+      <div class="detail-section-label">▶ Trailer</div>
+      <div class="detail-trailer">
+        <div class="trailer-container">
+          <iframe src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+        </div>
       </div>
     </div>
-    <div class="detail-info">
-      <h2 class="detail-title" id="detail-title"></h2>
-      <div class="modal-tags" id="detail-tags"></div>
-      <p class="detail-desc" id="detail-desc"></p>
-      <div class="detail-platforms" id="detail-platforms"></div>
-      <div class="detail-stats" id="detail-stats"></div>
+    <div class="detail-stats" id="detail-stats"></div>
+    <div class="detail-cta-wrap">
       <a href="#" class="btn btn-primary detail-cta" id="detail-cta" target="_blank" rel="noopener"></a>
     </div>
+    <div class="detail-screenshots">
+      <div class="detail-screenshots-label" data-i18n="detail.swipe">← Swipe for more screenshots →</div>
+      <div class="detail-screenshots-grid" id="detail-screenshots-grid"></div>
+    </div>
   </div>
-  <div class="detail-screenshots">
-    <div class="detail-screenshots-label" data-i18n="detail.swipe">← Swipe for more screenshots →</div>
-    <div class="detail-screenshots-grid" id="detail-screenshots-grid"></div>
-  </div>
-  <div class="detail-footer"></div>
 </div>
 
 <!-- Back to Top -->
@@ -1753,13 +1793,13 @@ const GameDetail = {
     `;
 
     // Trailer
-    const trailer = document.getElementById('detail-trailer');
+    const trailerSection = document.getElementById('detail-trailer-section');
     if (data.trailerUrl) {
-        trailer.querySelector('iframe').src = data.trailerUrl;
-        trailer.removeAttribute('hidden');
+        trailerSection.querySelector('iframe').src = data.trailerUrl;
+        trailerSection.removeAttribute('hidden');
     } else {
-        trailer.querySelector('iframe').src = '';
-        trailer.setAttribute('hidden', '');
+        trailerSection.querySelector('iframe').src = '';
+        trailerSection.setAttribute('hidden', '');
     }
 
     // Screenshots grid
