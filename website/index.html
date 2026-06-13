@@ -363,9 +363,9 @@ body{
 /* Content wrapper */
 .detail-content{max-width:900px;margin:0 auto;padding:1.5rem 2rem 3rem;width:100%}
 
-/* Hero image */
-.detail-hero{margin-bottom:2rem}
-.detail-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius);box-shadow:0 8px 40px rgba(0,0,0,0.5);display:block}
+/* Hero image — full-width edge to edge */
+.detail-hero{margin-left:-2rem;margin-right:-2rem;margin-bottom:2rem}
+.detail-hero img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
 
 /* Title + tags */
 .detail-title{font-size:2.25rem;font-weight:800;margin-bottom:0.75rem;color:var(--text-primary);letter-spacing:-0.02em}
@@ -397,10 +397,10 @@ body{
 .detail-cta-wrap{text-align:center;margin-bottom:2.5rem}
 .detail-cta{display:inline-block;padding:14px 48px;font-size:1rem}
 
-/* Screenshots */
-.detail-screenshots{margin-bottom:1rem}
+/* Screenshots — full-width edge to edge */
+.detail-screenshots{margin-left:-2rem;margin-right:-2rem;margin-bottom:1rem}
 .detail-screenshots-label{font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.08em;text-transform:uppercase}
-.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding:0 2rem 0.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
 .detail-screenshots-grid img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .detail-screenshots-grid img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
 
@@ -408,7 +408,10 @@ body{
 @media(max-width:768px){
   .detail-back{margin:0.5rem 0 0 0.75rem;padding:0.6rem 1rem;font-size:0.8rem}
   .detail-content{padding:1rem 1.25rem 2rem}
-  .detail-hero img{border-radius:var(--radius-sm)}
+  .detail-hero{margin-left:-1.25rem;margin-right:-1.25rem}
+  .detail-hero img{border-radius:0}
+  .detail-screenshots{margin-left:-1.25rem;margin-right:-1.25rem}
+  .detail-screenshots-grid{padding-left:1.25rem;padding-right:1.25rem}
   .detail-title{font-size:1.5rem}
   .detail-desc{font-size:0.95rem}
   .detail-stats{gap:0.5rem}
