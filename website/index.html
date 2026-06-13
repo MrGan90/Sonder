@@ -108,12 +108,12 @@ body{
 }
 .nav-logo:hover{color:var(--neon-purple)}
 .nav-links{display:flex;gap:2rem;list-style:none}
-.nav-links a{
+.nav-links a{position:relative;
   color:var(--text-secondary);text-decoration:none;
   font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;
   font-weight:500;transition:color 150ms ease;
 }
-.nav-links a:hover{color:var(--neon-cyan)}
+.nav-links a:hover{color:var(--neon-cyan)}.nav-links a.active{color:var(--neon-cyan)}.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--neon-cyan);border-radius:2px}
 .nav-toggle{
   display:none;background:none;border:none;color:var(--text-primary);
   font-size:1.5rem;cursor:pointer;padding:0.5rem;line-height:1;
@@ -373,12 +373,17 @@ body{
 .detail-stat strong{display:block;font-size:1.2rem;color:var(--text-primary);margin-bottom:0.15rem}
 .detail-stat .stat-label{font-size:0.78rem;color:var(--text-muted)}
 .detail-cta{display:block;text-align:center}
-.detail-screenshots{padding:2rem 2rem 1rem}
+.detail-trailer{padding:0 2rem 1.5rem}.trailer-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,0.4)}.trailer-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}.detail-screenshots{padding:2rem 2rem 1rem}
 .detail-screenshots-label{font-size:0.8rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.04em;text-transform:uppercase}
 .detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
 .detail-screenshots-grid img{flex:0 0 auto;width:280px;height:175px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .detail-screenshots-grid img:hover{transform:scale(1.03)}
 .detail-footer{padding:1.5rem 2rem 3rem;text-align:center}
+
+/* ---- Back to Top ---- */
+.back-to-top{position:fixed;bottom:2rem;right:2rem;z-index:150;width:44px;height:44px;border-radius:50%;background:var(--glass-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);color:var(--text-secondary);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition-medium),opacity 300ms ease,visibility 300ms ease;opacity:1;visibility:visible}
+.back-to-top[hidden]{opacity:0;visibility:hidden;display:flex}
+.back-to-top:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);box-shadow:0 4px 20px rgba(0,229,255,0.2);transform:translateY(-2px)}
 
 /* ---- Global scrollbar ---- */
 ::-webkit-scrollbar{width:4px;height:4px}
@@ -400,6 +405,8 @@ body{
   .detail-screenshots{padding:1.5rem 1rem 0.5rem}
   .detail-screenshots-grid img{width:200px;height:125px}
   .detail-footer{padding:1rem 1.5rem 2rem}
+  .back-to-top{bottom:1.25rem;right:1.25rem;width:40px;height:40px}
+  .detail-trailer{padding:0 1.25rem 1rem}
 }
 
 /* ---- Accessibility ---- */
@@ -587,6 +594,11 @@ body{
     <div class="detail-hero">
       <img id="detail-hero-img" src="" alt="">
     </div>
+    <div class="detail-trailer" id="detail-trailer" hidden>
+      <div class="trailer-container">
+        <iframe src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      </div>
+    </div>
     <div class="detail-info">
       <h2 class="detail-title" id="detail-title"></h2>
       <div class="modal-tags" id="detail-tags"></div>
@@ -602,6 +614,9 @@ body{
   </div>
   <div class="detail-footer"></div>
 </div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top" hidden>↑</button>
 
 <!-- ============================================================
      GLSL SHADERS (WebGL 2 — GLSL ES 3.00)
@@ -1571,6 +1586,7 @@ const gameData = {
     ],
     platforms: ['🪟 Windows', '🍎 macOS', '🐧 Linux'],
     storeUrl: '#',
+    trailerUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
     i18n: {
       en: {
         title: 'Sonder Engine',
@@ -1608,6 +1624,7 @@ const gameData = {
     ],
     platforms: ['🪟 Windows', '🍎 macOS'],
     storeUrl: '#',
+    trailerUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
     i18n: {
       en: {
         title: 'Loop Bullet',
@@ -1645,6 +1662,7 @@ const gameData = {
     ],
     platforms: ['🪟 Windows', '🍎 macOS'],
     storeUrl: '#',
+    trailerUrl: null,
     i18n: {
       en: {
         title: 'Project Nexus',
@@ -1733,6 +1751,16 @@ const GameDetail = {
       <div class="detail-stat"><span class="stat-icon">⭐</span><strong>${t.stat2}</strong><span class="stat-label">${t.stat2Label}</span></div>
       <div class="detail-stat"><span class="stat-icon">📅</span><strong>${t.stat3}</strong><span class="stat-label">${t.stat3Label}</span></div>
     `;
+
+    // Trailer
+    const trailer = document.getElementById('detail-trailer');
+    if (data.trailerUrl) {
+        trailer.querySelector('iframe').src = data.trailerUrl;
+        trailer.removeAttribute('hidden');
+    } else {
+        trailer.querySelector('iframe').src = '';
+        trailer.setAttribute('hidden', '');
+    }
 
     // Screenshots grid
     document.getElementById('detail-screenshots-grid').innerHTML = data.screenshots.map(src =>
@@ -1888,8 +1916,23 @@ class App {
         // Scroll animations
         this._setupScrollAnimations();
 
+        // Nav active state tracking
+        this._setupNavHighlight();
+
         // Mobile nav
         this._setupMobileNav();
+
+        // Back to top button
+        const backToTop = document.getElementById('back-to-top');
+        if (backToTop) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 400) backToTop.removeAttribute('hidden');
+                else backToTop.setAttribute('hidden', '');
+            }, { passive: true });
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
         // Smooth scroll for nav links with offset
         document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -2016,6 +2059,23 @@ class App {
         if (hero && hero.classList.contains('section')) {
             hero.classList.add('visible');
         }
+    }
+
+    _setupNavHighlight() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        const match = link.getAttribute('href') === '#' + id;
+                        link.classList.toggle('active', match);
+                    });
+                }
+            });
+        }, { threshold: 0.4, rootMargin: '-80px 0px 0px 0px' });
+        sections.forEach(s => observer.observe(s));
     }
 
     _setupMobileNav() {
