@@ -397,12 +397,14 @@ body{
 .detail-cta-wrap{text-align:center;margin-bottom:2.5rem}
 .detail-cta{display:inline-block;padding:14px 48px;font-size:1rem}
 
-/* Screenshots — full-width edge to edge */
-.detail-screenshots{margin-left:-2rem;margin-right:-2rem;margin-bottom:1rem}
+/* Screenshots — auto-scrolling banner */
+.detail-screenshots{margin-left:-2rem;margin-right:-2rem;margin-bottom:1rem;overflow:hidden}
 .detail-screenshots-label{font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.08em;text-transform:uppercase}
-.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding:0 2rem 0.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.detail-screenshots-grid img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.detail-screenshots-grid img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+.detail-screenshots-track{display:flex;gap:1rem;padding:0 2rem 0.75rem;width:max-content;animation:scrollBanner 30s linear infinite}
+.detail-screenshots-track:hover{animation-play-state:paused}
+.detail-screenshots-track img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.detail-screenshots-track img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+@keyframes scrollBanner{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* Detail responsive */
 @media(max-width:768px){
@@ -411,13 +413,13 @@ body{
   .detail-hero{margin-left:-1.25rem;margin-right:-1.25rem}
   .detail-hero img{border-radius:0}
   .detail-screenshots{margin-left:-1.25rem;margin-right:-1.25rem}
-  .detail-screenshots-grid{padding-left:1.25rem;padding-right:1.25rem}
+  .detail-screenshots-track{padding-left:1.25rem;padding-right:1.25rem}
   .detail-title{font-size:1.5rem}
   .detail-desc{font-size:0.95rem}
   .detail-stats{gap:0.5rem}
   .detail-stat{padding:1rem 0.5rem}
   .detail-stat strong{font-size:1.1rem}
-  .detail-screenshots-grid img{width:220px;height:138px}
+  .detail-screenshots-track img{width:220px;height:138px}
   .detail-cta{padding:12px 32px;font-size:0.95rem}
   .detail-platforms{flex-wrap:nowrap;gap:0.4rem}
   .detail-platforms span{padding:5px 10px;font-size:0.72rem;white-space:nowrap}
@@ -446,7 +448,7 @@ body{
   .detail-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}
   .detail-stat{padding:1rem 0.25rem}
   .detail-screenshots{padding:1.5rem 1rem 0.5rem}
-  .detail-screenshots-grid img{width:200px;height:125px}
+  .detail-screenshots-track img{width:200px;height:125px}
   .detail-footer{padding:1rem 1.5rem 2rem}
   .back-to-top{bottom:1.25rem;right:1.25rem;width:40px;height:40px}
   .detail-trailer-section{margin-bottom:1.5rem}
@@ -655,7 +657,7 @@ body{
     </div>
     <div class="detail-screenshots">
       <div class="detail-screenshots-label" data-i18n="detail.swipe">← Swipe for more screenshots →</div>
-      <div class="detail-screenshots-grid" id="detail-screenshots-grid"></div>
+      <div class="detail-screenshots-track" id="detail-screenshots-track"></div>
     </div>
   </div>
 </div>
@@ -1808,9 +1810,11 @@ const GameDetail = {
     }
 
     // Screenshots grid
-    document.getElementById('detail-screenshots-grid').innerHTML = data.screenshots.map(src =>
+    // Duplicate screenshots for seamless auto-scroll banner
+    const shotsHTML = data.screenshots.map(src =>
       `<img src="${src}" alt="${t.title} screenshot" loading="lazy">`
     ).join('');
+    document.getElementById('detail-screenshots-track').innerHTML = shotsHTML + shotsHTML;
 
     // CTA
     const cta = document.getElementById('detail-cta');
