@@ -354,44 +354,55 @@ body{
 	.lang-select-dropdown [role="option"]:hover{background:rgba(0,229,255,0.08);color:var(--neon-cyan)}
 	.lang-select-dropdown [role="option"][aria-selected="true"]{color:var(--neon-cyan);font-weight:600;background:rgba(0,229,255,0.05)}
 
-	/* ---- Game Detail Modal ---- */
-	.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem}
-	.modal-overlay[hidden]{display:none}
-	.modal-backdrop{position:absolute;inset:0;background:rgba(2,2,10,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer}
-	.modal-panel{position:relative;width:100%;max-width:800px;max-height:90vh;overflow-y:auto;padding:0;z-index:1;animation:modalIn 350ms var(--ease-out-expo)}
-	@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-	.modal-close{position:absolute;top:0.75rem;right:0.75rem;z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:rgba(8,8,20,0.8);color:var(--text-secondary);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 200ms ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);line-height:1}
-	.modal-close:hover{color:var(--neon-magenta);border-color:var(--neon-magenta);box-shadow:0 0 16px rgba(255,0,229,0.2)}
-	.modal-hero{aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;background:rgba(255,255,255,0.03)}
-	.modal-hero img{width:100%;height:100%;object-fit:cover;display:block}
-	.modal-body{padding:2rem 2.5rem 2.5rem}
-	.modal-title{font-size:1.75rem;font-weight:700;margin-bottom:0.75rem;color:var(--text-primary)}
-	.modal-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem}
-	.modal-desc{color:var(--text-secondary);line-height:1.7;margin-bottom:1.5rem}
-	.modal-platforms{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
-	.modal-platforms span{display:flex;align-items:center;gap:0.4rem;padding:6px 14px;background:rgba(255,255,255,0.04);border-radius:100px;font-size:0.82rem;color:var(--text-secondary)}
-	.modal-screenshots{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:0.5rem;margin-bottom:1.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-	.modal-screenshots img{flex:0 0 auto;width:200px;height:125px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease}
-	.modal-screenshots img:hover{transform:scale(1.03)}
-	.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem}
-	.modal-stat{text-align:center;padding:1rem 0.5rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm)}
-	.modal-stat .stat-icon{font-size:1.25rem;display:block;margin-bottom:0.35rem}
-	.modal-stat strong{display:block;font-size:1.15rem;color:var(--text-primary);margin-bottom:0.15rem}
-	.modal-stat .stat-label{font-size:0.78rem;color:var(--text-muted)}
-	.modal-cta{display:block;text-align:center;width:fit-content;margin:0 auto}
+	/* ---- Game Detail (Full-Screen Page) ---- */
+.detail-page{position:fixed;inset:0;z-index:200;background:var(--bg-deep);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.detail-page[hidden]{display:none}
+.detail-back{position:sticky;top:0;z-index:10;display:inline-flex;align-items:center;gap:0.5rem;padding:1rem 1.5rem;margin:1rem 0 0 1rem;background:rgba(8,8,20,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:100px;color:var(--text-secondary);font-family:var(--font-sans);font-size:0.85rem;cursor:pointer;transition:all 200ms ease;width:fit-content}
+.detail-back:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);box-shadow:0 0 16px rgba(0,229,255,0.15)}
+.detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;min-height:0}
+.detail-hero{position:relative;overflow:hidden;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;padding:2rem}
+.detail-hero img{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.detail-info{display:flex;flex-direction:column;justify-content:center;padding:3rem 3rem 3rem 1rem;overflow-y:auto}
+.detail-title{font-size:2.25rem;font-weight:800;margin-bottom:0.75rem;color:var(--text-primary);letter-spacing:-0.02em}
+.detail-desc{color:var(--text-secondary);line-height:1.75;margin-bottom:1.75rem;font-size:1rem}
+.detail-platforms{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.detail-platforms span{display:flex;align-items:center;gap:0.4rem;padding:7px 16px;background:rgba(255,255,255,0.04);border-radius:100px;font-size:0.82rem;color:var(--text-secondary);border:1px solid var(--glass-border)}
+.detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.75rem}
+.detail-stat{text-align:center;padding:1.25rem 0.5rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid var(--glass-border)}
+.detail-stat .stat-icon{font-size:1.25rem;display:block;margin-bottom:0.35rem}
+.detail-stat strong{display:block;font-size:1.2rem;color:var(--text-primary);margin-bottom:0.15rem}
+.detail-stat .stat-label{font-size:0.78rem;color:var(--text-muted)}
+.detail-cta{display:block;text-align:center}
+.detail-screenshots{padding:2rem 2rem 1rem}
+.detail-screenshots-label{font-size:0.8rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.04em;text-transform:uppercase}
+.detail-screenshots-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:0.5rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.detail-screenshots-grid img{flex:0 0 auto;width:280px;height:175px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.detail-screenshots-grid img:hover{transform:scale(1.03)}
+.detail-footer{padding:1.5rem 2rem 3rem;text-align:center}
 
-	/* ---- Mobile modal ---- */
-	@media(max-width:768px){
-	  .modal-overlay{padding:0;align-items:flex-end}
-	  .modal-panel{max-width:100%;max-height:95vh;border-radius:var(--radius) var(--radius) 0 0}
-	  .modal-body{padding:1.5rem}
-	  .modal-title{font-size:1.4rem}
-	  .modal-screenshots img{width:150px;height:94px}
-	  .modal-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}
-	  .modal-stat{padding:0.75rem 0.25rem}
-	}
+/* ---- Global scrollbar ---- */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,229,255,0.15);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,229,255,0.3)}
 
-	/* ---- Accessibility ---- */
+/* ---- Detail responsive ---- */
+@media(max-width:768px){
+  .detail-back{margin:0.5rem 0 0 0.5rem;padding:0.65rem 1rem;font-size:0.8rem}
+  .detail-layout{grid-template-columns:1fr}
+  .detail-hero{padding:1.5rem}
+  .detail-hero img{max-height:40vh;border-radius:var(--radius-sm)}
+  .detail-info{padding:1.5rem;overflow-y:visible}
+  .detail-title{font-size:1.6rem}
+  .detail-desc{font-size:0.95rem}
+  .detail-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+  .detail-stat{padding:1rem 0.25rem}
+  .detail-screenshots{padding:1.5rem 1rem 0.5rem}
+  .detail-screenshots-grid img{width:200px;height:125px}
+  .detail-footer{padding:1rem 1.5rem 2rem}
+}
+
+/* ---- Accessibility ---- */
 	@media(prefers-reduced-motion:reduce){
 	  *,*::before,*::after{
 	    animation-duration:0.01ms !important;
@@ -566,25 +577,30 @@ body{
 </div>
 
 <!-- ============================================================
-     GAME DETAIL MODAL
+     GAME DETAIL (FULL-SCREEN PAGE)
      ============================================================ -->
-<div class="modal-overlay" id="game-modal" hidden>
-  <div class="modal-backdrop"></div>
-  <div class="modal-panel glass-panel">
-    <button class="modal-close" aria-label="Close">✕</button>
-    <div class="modal-hero">
-      <img id="modal-hero-img" src="" alt="">
+<div class="detail-page" id="game-detail" hidden>
+  <button class="detail-back" aria-label="Back to games" data-i18n="detail.back">
+    <span>←</span> <span>Back to Games</span>
+  </button>
+  <div class="detail-layout">
+    <div class="detail-hero">
+      <img id="detail-hero-img" src="" alt="">
     </div>
-    <div class="modal-body">
-      <h2 class="modal-title" id="modal-title"></h2>
-      <div class="modal-tags" id="modal-tags"></div>
-      <p class="modal-desc" id="modal-desc"></p>
-      <div class="modal-platforms" id="modal-platforms"></div>
-      <div class="modal-screenshots" id="modal-screenshots"></div>
-      <div class="modal-stats" id="modal-stats"></div>
-      <a href="#" class="btn btn-primary modal-cta" id="modal-cta" target="_blank" rel="noopener"></a>
+    <div class="detail-info">
+      <h2 class="detail-title" id="detail-title"></h2>
+      <div class="modal-tags" id="detail-tags"></div>
+      <p class="detail-desc" id="detail-desc"></p>
+      <div class="detail-platforms" id="detail-platforms"></div>
+      <div class="detail-stats" id="detail-stats"></div>
+      <a href="#" class="btn btn-primary detail-cta" id="detail-cta" target="_blank" rel="noopener"></a>
     </div>
   </div>
+  <div class="detail-screenshots">
+    <div class="detail-screenshots-label" data-i18n="detail.swipe">← Swipe for more screenshots →</div>
+    <div class="detail-screenshots-grid" id="detail-screenshots-grid"></div>
+  </div>
+  <div class="detail-footer"></div>
 </div>
 
 <!-- ============================================================
@@ -1306,6 +1322,8 @@ const I18n = {
       'contact.itch': 'itch.io',
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder. Built with code, art, and way too much caffeine.',
+      'detail.back': '← Back to Games',
+      'detail.swipe': '← Swipe for more screenshots →',
     },
 
     'zh-CN': {
@@ -1369,6 +1387,8 @@ const I18n = {
       'contact.itch': 'itch.io',
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder。用代码、艺术和大量咖啡因构建。',
+      'detail.back': '← 返回游戏列表',
+      'detail.swipe': '← 滑动查看更多截图 →',
     },
 
     ja: {
@@ -1432,6 +1452,8 @@ const I18n = {
       'contact.itch': 'itch.io',
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder。コードとアートと大量のカフェインで構築。',
+      'detail.back': '← ゲーム一覧に戻る',
+      'detail.swipe': '← スワイプでスクリーンショット →',
     },
   },
 
@@ -1535,16 +1557,17 @@ const I18n = {
 };
 
 // ============================================================
-// GAME DATA & MODAL
+// ============================================================
+// GAME DATA & DETAIL PAGE
 // ============================================================
 const gameData = {
   'sonder-engine': {
-    hero: 'https://placehold.co/800x450/0a0a20/00e5ff?text=Sonder+Engine',
+    hero: 'https://placehold.co/1200x800/0a0a1a/00e5ff?text=Sonder+Engine',
     screenshots: [
-      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+1',
-      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+2',
-      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+3',
-      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+4',
+      'https://placehold.co/600x375/0a0a1a/00e5ff?text=Gameplay+1',
+      'https://placehold.co/600x375/0a0a1a/00e5ff?text=Gameplay+2',
+      'https://placehold.co/600x375/0a0a1a/00e5ff?text=Gameplay+3',
+      'https://placehold.co/600x375/0a0a1a/00e5ff?text=Gameplay+4',
     ],
     platforms: ['🪟 Windows', '🍎 macOS', '🐧 Linux'],
     storeUrl: '#',
@@ -1576,12 +1599,12 @@ const gameData = {
     },
   },
   'loop-bullet': {
-    hero: 'https://placehold.co/800x450/0a0a20/ff00e5?text=Loop+Bullet',
+    hero: 'https://placehold.co/1200x800/0a0a1a/ff00e5?text=Loop+Bullet',
     screenshots: [
-      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+1',
-      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+2',
-      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+3',
-      'https://placehold.co/400x250/0a0a20/ff00e5?text=Boss+Fight',
+      'https://placehold.co/600x375/0a0a1a/ff00e5?text=Action+1',
+      'https://placehold.co/600x375/0a0a1a/ff00e5?text=Action+2',
+      'https://placehold.co/600x375/0a0a1a/ff00e5?text=Action+3',
+      'https://placehold.co/600x375/0a0a1a/ff00e5?text=Boss+Fight',
     ],
     platforms: ['🪟 Windows', '🍎 macOS'],
     storeUrl: '#',
@@ -1613,12 +1636,12 @@ const gameData = {
     },
   },
   'project-nexus': {
-    hero: 'https://placehold.co/800x450/0a0a20/8b00ff?text=Project+Nexus',
+    hero: 'https://placehold.co/1200x800/0a0a1a/8b00ff?text=Project+Nexus',
     screenshots: [
-      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+1',
-      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+2',
-      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+3',
-      'https://placehold.co/400x250/0a0a20/8b00ff?text=Atmosphere',
+      'https://placehold.co/600x375/0a0a1a/8b00ff?text=World+1',
+      'https://placehold.co/600x375/0a0a1a/8b00ff?text=World+2',
+      'https://placehold.co/600x375/0a0a1a/8b00ff?text=World+3',
+      'https://placehold.co/600x375/0a0a1a/8b00ff?text=Atmosphere',
     ],
     platforms: ['🪟 Windows', '🍎 macOS'],
     storeUrl: '#',
@@ -1651,28 +1674,26 @@ const gameData = {
   },
 };
 
-const GameModal = {
+const GameDetail = {
   init() {
-    this.overlay = document.getElementById('game-modal');
-    this.backdrop = this.overlay.querySelector('.modal-backdrop');
-    this.closeBtn = this.overlay.querySelector('.modal-close');
+    this.page = document.getElementById('game-detail');
+    this.backBtn = this.page.querySelector('.detail-back');
 
     // Card click
     document.querySelectorAll('.game-card[data-game]').forEach(card => {
       card.style.cursor = 'pointer';
       card.addEventListener('click', (e) => {
-        // Don't trigger if clicking the "Learn More" link
         if (e.target.closest('.game-link')) return;
         this.open(card.getAttribute('data-game'));
       });
     });
 
-    // Close events
-    this.closeBtn.addEventListener('click', () => this.close());
-    this.backdrop.addEventListener('click', () => this.close());
+    // Back button
+    this.backBtn.addEventListener('click', () => this.close());
 
+    // Escape key
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !this.overlay.hasAttribute('hidden')) {
+      if (e.key === 'Escape' && !this.page.hasAttribute('hidden')) {
         this.close();
       }
     });
@@ -1685,13 +1706,13 @@ const GameModal = {
     const lang = I18n.current;
     const t = data.i18n[lang] || data.i18n.en;
 
-    document.getElementById('modal-hero-img').src = data.hero;
-    document.getElementById('modal-hero-img').alt = t.title;
-    document.getElementById('modal-title').textContent = t.title;
-    document.getElementById('modal-desc').textContent = t.desc;
+    document.getElementById('detail-hero-img').src = data.hero;
+    document.getElementById('detail-hero-img').alt = t.title;
+    document.getElementById('detail-title').textContent = t.title;
+    document.getElementById('detail-desc').textContent = t.desc;
 
     // Tags
-    const tagsEl = document.getElementById('modal-tags');
+    const tagsEl = document.getElementById('detail-tags');
     tagsEl.innerHTML = '';
     const cardTags = document.querySelector(`[data-game="${gameId}"] .game-tags`);
     if (cardTags) {
@@ -1704,35 +1725,33 @@ const GameModal = {
     }
 
     // Platforms
-    const platEl = document.getElementById('modal-platforms');
-    platEl.innerHTML = data.platforms.map(p => `<span>${p}</span>`).join('');
+    document.getElementById('detail-platforms').innerHTML = data.platforms.map(p => `<span>${p}</span>`).join('');
 
-    // Screenshots
-    const shotsEl = document.getElementById('modal-screenshots');
-    shotsEl.innerHTML = data.screenshots.map(src =>
+    // Stats
+    document.getElementById('detail-stats').innerHTML = `
+      <div class="detail-stat"><span class="stat-icon">👥</span><strong>${t.stat1}</strong><span class="stat-label">${t.stat1Label}</span></div>
+      <div class="detail-stat"><span class="stat-icon">⭐</span><strong>${t.stat2}</strong><span class="stat-label">${t.stat2Label}</span></div>
+      <div class="detail-stat"><span class="stat-icon">📅</span><strong>${t.stat3}</strong><span class="stat-label">${t.stat3Label}</span></div>
+    `;
+
+    // Screenshots grid
+    document.getElementById('detail-screenshots-grid').innerHTML = data.screenshots.map(src =>
       `<img src="${src}" alt="${t.title} screenshot" loading="lazy">`
     ).join('');
 
-    // Stats
-    document.getElementById('modal-stats').innerHTML = `
-      <div class="modal-stat"><span class="stat-icon">👥</span><strong>${t.stat1}</strong><span class="stat-label">${t.stat1Label}</span></div>
-      <div class="modal-stat"><span class="stat-icon">⭐</span><strong>${t.stat2}</strong><span class="stat-label">${t.stat2Label}</span></div>
-      <div class="modal-stat"><span class="stat-icon">📅</span><strong>${t.stat3}</strong><span class="stat-label">${t.stat3Label}</span></div>
-    `;
-
     // CTA
-    const cta = document.getElementById('modal-cta');
+    const cta = document.getElementById('detail-cta');
     cta.textContent = t.cta;
     cta.href = data.storeUrl;
 
     // Show
-    this.overlay.removeAttribute('hidden');
+    this.page.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
-    this.overlay.querySelector('.modal-panel').scrollTop = 0;
+    this.page.scrollTop = 0;
   },
 
   close() {
-    this.overlay.setAttribute('hidden', '');
+    this.page.setAttribute('hidden', '');
     document.body.style.overflow = '';
   },
 };
@@ -1766,7 +1785,7 @@ class App {
         }
 
         I18n.init();
-        GameModal.init();
+        GameDetail.init();
 
         this._bindEvents();
         if (this.fluid) {
