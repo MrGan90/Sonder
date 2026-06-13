@@ -398,9 +398,9 @@ body{
 .detail-cta{display:inline-block;padding:14px 48px;font-size:1rem}
 
 /* Screenshots — auto-scrolling banner */
-.detail-screenshots{margin-left:-2rem;margin-right:-2rem;margin-bottom:1rem;overflow:hidden}
+.detail-screenshots{margin-bottom:2rem}
 .detail-screenshots-label{font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.08em;text-transform:uppercase}
-.detail-screenshots-track{display:flex;gap:1rem;padding:0 2rem 0.75rem;width:max-content;animation:scrollBanner 30s linear infinite}
+.detail-screenshots-track{display:flex;gap:1rem;padding-bottom:0.75rem;width:max-content;animation:scrollBanner 30s linear infinite}
 .detail-screenshots-track:hover{animation-play-state:paused}
 .detail-screenshots-track img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .detail-screenshots-track img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
@@ -412,8 +412,7 @@ body{
   .detail-content{padding:1rem 1.25rem 2rem}
   .detail-hero{margin-left:-1.25rem;margin-right:-1.25rem}
   .detail-hero img{border-radius:0}
-  .detail-screenshots{margin-left:-1.25rem;margin-right:-1.25rem}
-  .detail-screenshots-track{padding-left:1.25rem;padding-right:1.25rem}
+  .detail-screenshots{margin-bottom:1.5rem}
   .detail-title{font-size:1.5rem}
   .detail-desc{font-size:0.95rem}
   .detail-stats{gap:0.5rem}
@@ -656,7 +655,7 @@ body{
       <a href="#" class="btn btn-primary detail-cta" id="detail-cta" target="_blank" rel="noopener"></a>
     </div>
     <div class="detail-screenshots">
-      <div class="detail-screenshots-label" data-i18n="detail.swipe">← Swipe for more screenshots →</div>
+      <div class="detail-screenshots-label" data-i18n="detail.screenshots">📸 Screenshots</div>
       <div class="detail-screenshots-track" id="detail-screenshots-track"></div>
     </div>
   </div>
@@ -1385,7 +1384,7 @@ const I18n = {
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder. Built with code, art, and way too much caffeine.',
       'detail.back': '← Back to Games',
-      'detail.swipe': '← Swipe for more screenshots →',
+      'detail.screenshots': '📸 Screenshots',
     },
 
     'zh-CN': {
@@ -1450,7 +1449,7 @@ const I18n = {
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder。用代码、艺术和大量咖啡因构建。',
       'detail.back': '← 返回游戏列表',
-      'detail.swipe': '← 滑动查看更多截图 →',
+      'detail.screenshots': '📸 游戏截图',
     },
 
     ja: {
@@ -1515,7 +1514,7 @@ const I18n = {
       'contact.twitter': 'Twitter / X',
       'footer.copyright': '&copy; {year} Sonder。コードとアートと大量のカフェインで構築。',
       'detail.back': '← ゲーム一覧に戻る',
-      'detail.swipe': '← スワイプでスクリーンショット →',
+      'detail.screenshots': '📸 スクリーンショット',
     },
   },
 
