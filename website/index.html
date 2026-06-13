@@ -1740,6 +1740,7 @@ const GameDetail = {
   init() {
     this.page = document.getElementById('game-detail');
     this.backBtn = this.page.querySelector('.detail-back');
+    this._scrollPaused = false;
 
     // Card click
     document.querySelectorAll('.game-card[data-game]').forEach(card => {
@@ -1759,6 +1760,13 @@ const GameDetail = {
         this.close();
       }
     });
+
+    // Screenshots hover: pause auto-scroll
+    const track = document.getElementById('detail-screenshots-track');
+    if (track) {
+      track.addEventListener('mouseenter', () => { this._scrollPaused = true; });
+      track.addEventListener('mouseleave', () => { this._scrollPaused = false; });
+    }
   },
 
   open(gameId) {
@@ -1829,23 +1837,33 @@ const GameDetail = {
 
   _startScroll() {
     const track = document.getElementById('detail-screenshots-track');
-    if (!track) return;
+    if (!track || !track.children.length) return;
     this._stopScroll();
-    const speed = 0.6; // pixels per frame
+
+    // Measure width of one full set (first image to first duplicate image)
+    const imgs = track.children;
+    const count = imgs.length / 2;
+    const singleWidth = imgs[count].offsetLeft; // position of first duplicate
+    if (!singleWidth) return;
+
+    const speed = 0.5;
     let pos = 0;
-    const singleWidth = track.scrollWidth / 2;
-    const step = () => {
-      pos += speed;
-      if (pos >= singleWidth) pos -= singleWidth;
+    let lastTime = performance.now();
+
+    const step = (now) => {
+      if (this._scrollPaused) {
+        lastTime = now;
+        this._scrollRaf = requestAnimationFrame(step);
+        return;
+      }
+      const dt = Math.min(now - lastTime, 33); // cap at ~30fps for consistency
+      lastTime = now;
+      pos = (pos + speed * dt * 0.06) % singleWidth;
       track.style.transform = `translateX(${-pos}px)`;
       this._scrollRaf = requestAnimationFrame(step);
     };
+
     this._scrollRaf = requestAnimationFrame(step);
-    // Pause on hover
-    track.addEventListener('mouseenter', () => cancelAnimationFrame(this._scrollRaf));
-    track.addEventListener('mouseleave', () => {
-      this._scrollRaf = requestAnimationFrame(step);
-    });
   },
 
   _stopScroll() {
