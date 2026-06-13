@@ -400,11 +400,9 @@ body{
 /* Screenshots — auto-scrolling banner */
 .detail-screenshots{margin-bottom:2rem;overflow:hidden}
 .detail-screenshots-label{font-size:0.75rem;color:var(--text-muted);text-align:center;margin-bottom:1rem;letter-spacing:0.08em;text-transform:uppercase}
-.detail-screenshots-track{display:flex;gap:1rem;padding-bottom:0.75rem;width:max-content;animation:scrollBanner 30s linear infinite}
-.detail-screenshots-track:hover{animation-play-state:paused}
+.detail-screenshots-track{display:flex;gap:1rem;padding-bottom:0.75rem;width:max-content;will-change:transform}
 .detail-screenshots-track img{flex:0 0 auto;width:300px;height:188px;object-fit:cover;border-radius:var(--radius-sm);transition:transform 200ms ease,box-shadow 200ms ease;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
 .detail-screenshots-track img:hover{transform:scale(1.03);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
-@keyframes scrollBanner{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* Detail responsive */
 @media(max-width:768px){
@@ -1824,9 +1822,41 @@ const GameDetail = {
     this.page.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
     this.page.scrollTop = 0;
+
+    // Start screenshot auto-scroll after a short delay (wait for layout)
+    setTimeout(() => this._startScroll(), 150);
+  },
+
+  _startScroll() {
+    const track = document.getElementById('detail-screenshots-track');
+    if (!track) return;
+    this._stopScroll();
+    const speed = 0.6; // pixels per frame
+    let pos = 0;
+    const singleWidth = track.scrollWidth / 2;
+    const step = () => {
+      pos += speed;
+      if (pos >= singleWidth) pos -= singleWidth;
+      track.style.transform = `translateX(${-pos}px)`;
+      this._scrollRaf = requestAnimationFrame(step);
+    };
+    this._scrollRaf = requestAnimationFrame(step);
+    // Pause on hover
+    track.addEventListener('mouseenter', () => cancelAnimationFrame(this._scrollRaf));
+    track.addEventListener('mouseleave', () => {
+      this._scrollRaf = requestAnimationFrame(step);
+    });
+  },
+
+  _stopScroll() {
+    if (this._scrollRaf) {
+      cancelAnimationFrame(this._scrollRaf);
+      this._scrollRaf = null;
+    }
   },
 
   close() {
+    this._stopScroll();
     this.page.setAttribute('hidden', '');
     document.body.style.overflow = '';
   },
