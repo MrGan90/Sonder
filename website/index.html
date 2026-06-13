@@ -2233,19 +2233,23 @@ class App {
 
     _setupCardTilt() {
         document.querySelectorAll('.game-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
+            const tilt = (x, y) => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
                 const cx = rect.width / 2;
                 const cy = rect.height / 2;
-                const rx = ((y - cy) / cy) * -8;  // tilt up/down
-                const ry = ((x - cx) / cx) * 8;    // tilt left/right
+                const rx = ((y - rect.top - cy) / cy) * -8;
+                const ry = ((x - rect.left - cx) / cx) * 8;
                 card.style.transform = `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-2px)`;
-            });
-            card.addEventListener('mouseleave', () => {
+            };
+            const reset = () => {
                 card.style.transform = 'perspective(1200px) rotateX(0) rotateY(0) translateY(0)';
-            });
+            };
+            card.addEventListener('mousemove', (e) => tilt(e.clientX, e.clientY));
+            card.addEventListener('mouseleave', reset);
+            card.addEventListener('touchmove', (e) => {
+                if (e.touches.length) tilt(e.touches[0].clientX, e.touches[0].clientY);
+            }, { passive: true });
+            card.addEventListener('touchend', reset);
         });
     }
 
