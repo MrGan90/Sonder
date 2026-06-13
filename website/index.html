@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Sonder — Indie Game Developer. Building immersive worlds at the intersection of code and art.">
+<meta name="description" content="Sonder — Indie Game Developer. Building immersive worlds at the intersection of code and art." data-i18n="meta.desc">
 <meta name="theme-color" content="#06060f">
-<title>Sonder — Indie Game Developer</title>
-<!-- Open Graph -->
-<meta property="og:title" content="Sonder — Indie Game Developer">
-<meta property="og:description" content="Building immersive worlds at the intersection of code and art">
+<title data-i18n="meta.title">Sonder — Indie Game Developer</title>
+<!-- Open Graph (data-i18n managed) -->
+<meta property="og:title" content="Sonder — Indie Game Developer" data-i18n="meta.ogTitle">
+<meta property="og:description" content="Building immersive worlds at the intersection of code and art" data-i18n="meta.ogDesc">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sonder">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sonder — Indie Game Developer">
-<meta name="twitter:description" content="Building immersive worlds at the intersection of code and art">
+<meta name="twitter:title" content="Sonder — Indie Game Developer" data-i18n="meta.twTitle">
+<meta name="twitter:description" content="Building immersive worlds at the intersection of code and art" data-i18n="meta.twDesc">
 <!-- Favicon (inline SVG) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -324,6 +324,11 @@ body{
   .contact-card{padding:1.5rem 2rem;min-width:140px}
   .glass-panel{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(8,8,20,0.75)}
   .glass-panel:hover{background:rgba(12,12,30,0.85)}
+  .lang-select-btn{padding:6px 10px;gap:0;min-width:38px;justify-content:center}
+  .lang-select-label{display:none}
+  .lang-select-chevron{display:none}
+  .lang-select-icon{font-size:1rem}
+  .lang-select-dropdown{right:-4px}
 }
 
 @media(max-width:480px){
@@ -332,6 +337,20 @@ body{
   .about-panel{padding:1.25rem}
   .skill-badges{gap:0.5rem}
 }
+
+	/* ---- Language Selector ---- */
+	.lang-select{position:relative;z-index:101}
+	.lang-select-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--glass-bg);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));border:1px solid var(--glass-border);border-radius:100px;color:var(--text-primary);font-family:var(--font-sans);font-size:0.8rem;font-weight:500;letter-spacing:0.04em;cursor:pointer;transition:all var(--transition-medium);white-space:nowrap}
+	.lang-select-btn:hover,.lang-select-btn[aria-expanded="true"]{background:var(--glass-bg-hover);border-color:var(--neon-cyan);color:var(--neon-cyan);box-shadow:0 0 16px rgba(0,229,255,0.15)}
+	.lang-select-icon{font-size:0.85rem;line-height:1}
+	.lang-select-chevron{font-size:0.6rem;transition:transform var(--transition-medium);line-height:1}
+	.lang-select-btn[aria-expanded="true"] .lang-select-chevron{transform:rotate(180deg)}
+	.lang-select-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:148px;list-style:none;background:rgba(8,8,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;padding:0.35rem 0;box-shadow:0 12px 40px rgba(0,0,0,0.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 200ms var(--ease-out-expo),transform 200ms var(--ease-out-expo)}
+	.lang-select-dropdown[hidden]{display:block;opacity:0;transform:translateY(-6px);pointer-events:none}
+	.lang-select-dropdown:not([hidden]){opacity:1;transform:translateY(0);pointer-events:auto}
+	.lang-select-dropdown [role="option"]{padding:0.6rem 1.25rem;font-size:0.85rem;color:var(--text-secondary);cursor:pointer;transition:all 150ms ease}
+	.lang-select-dropdown [role="option"]:hover{background:rgba(0,229,255,0.08);color:var(--neon-cyan)}
+	.lang-select-dropdown [role="option"][aria-selected="true"]{color:var(--neon-cyan);font-weight:600;background:rgba(0,229,255,0.05)}
 
 	/* ---- Accessibility ---- */
 	@media(prefers-reduced-motion:reduce){
@@ -355,76 +374,88 @@ body{
 <div class="app">
 
   <nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
-    <a href="#hero" class="nav-logo">SONDER</a>
+    <a href="#hero" class="nav-logo" data-i18n="nav.logo">SONDER</a>
     <ul class="nav-links">
-      <li><a href="#games">Games</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#games" data-i18n="nav.games">Games</a></li>
+      <li><a href="#about" data-i18n="nav.about">About</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <div class="lang-select" aria-label="Language selector">
+      <button class="lang-select-btn" aria-expanded="false" aria-haspopup="listbox" type="button">
+        <span class="lang-select-icon" aria-hidden="true">🌐</span>
+        <span class="lang-select-label">EN</span>
+        <span class="lang-select-chevron" aria-hidden="true">▾</span>
+      </button>
+      <ul class="lang-select-dropdown" role="listbox" hidden>
+        <li role="option" data-lang="en" aria-selected="true">English</li>
+        <li role="option" data-lang="zh-CN" aria-selected="false">简体中文</li>
+        <li role="option" data-lang="ja" aria-selected="false">日本語</li>
+      </ul>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" data-i18n="nav.toggle">☰</button>
   </nav>
 
   <section id="hero" class="hero">
     <div class="hero-content">
-      <h1 class="hero-name">Sonder</h1>
-      <p class="hero-role">Indie Game Developer</p>
-      <p class="hero-tagline">Building immersive worlds at the intersection of code and art</p>
+      <h1 class="hero-name" data-i18n="hero.name">Sonder</h1>
+      <p class="hero-role" data-i18n="hero.role">Indie Game Developer</p>
+      <p class="hero-tagline" data-i18n="hero.tagline">Building immersive worlds at the intersection of code and art</p>
       <div class="hero-cta">
-        <a href="#games" class="btn btn-primary">View Games</a>
-        <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+        <a href="#games" class="btn btn-primary" data-i18n="hero.cta1">View Games</a>
+        <a href="#contact" class="btn btn-secondary" data-i18n="hero.cta2">Get in Touch</a>
       </div>
     </div>
     <div class="scroll-indicator" aria-hidden="true">↓</div>
   </section>
 
   <section id="games" class="section">
-    <h2 class="section-title">Games</h2>
+    <h2 class="section-title" data-i18n="games.title">Games</h2>
     <div class="game-grid">
       <article class="game-card glass-panel">
         <div class="game-card-image">
-          <img src="https://placehold.co/600x340/1a1a2e/00e5ff?text=Sonder+Engine+Demo" alt="Sonder Engine Demo screenshot" loading="lazy">
+          <img src="https://placehold.co/600x340/1a1a2e/00e5ff?text=Sonder+Engine+Demo" alt="Sonder Engine Demo screenshot" data-i18n="games.card1.alt" loading="lazy">
         </div>
         <div class="game-card-body">
-          <h3>Sonder Engine</h3>
-          <p>A custom game built with Unity featuring innovative conveyor-belt mechanics and puzzle-solving gameplay.</p>
+          <h3 data-i18n="games.card1.title">Sonder Engine</h3>
+          <p data-i18n="games.card1.desc">A custom game built with Unity featuring innovative conveyor-belt mechanics and puzzle-solving gameplay.</p>
           <div class="game-tags">
-            <span class="tag">Unity</span>
-            <span class="tag">Puzzle</span>
-            <span class="tag">3D</span>
+            <span class="tag" data-i18n="games.card1.tag1">Unity</span>
+            <span class="tag" data-i18n="games.card1.tag2">Puzzle</span>
+            <span class="tag" data-i18n="games.card1.tag3">3D</span>
           </div>
-          <a href="#" class="game-link">Learn More →</a>
+          <a href="#" class="game-link" data-i18n="games.card1.link">Learn More →</a>
         </div>
       </article>
 
       <article class="game-card glass-panel">
         <div class="game-card-image">
-          <img src="https://placehold.co/600x340/1a1a2e/ff00e5?text=Loop+Bullet" alt="Loop Bullet screenshot" loading="lazy">
+          <img src="https://placehold.co/600x340/1a1a2e/ff00e5?text=Loop+Bullet" alt="Loop Bullet screenshot" data-i18n="games.card2.alt" loading="lazy">
         </div>
         <div class="game-card-body">
-          <h3>Loop Bullet</h3>
-          <p>Fast-paced bullet-hell roguelite with looping mechanics. Dodge, weave, and master the loop.</p>
+          <h3 data-i18n="games.card2.title">Loop Bullet</h3>
+          <p data-i18n="games.card2.desc">Fast-paced bullet-hell roguelite with looping mechanics. Dodge, weave, and master the loop.</p>
           <div class="game-tags">
-            <span class="tag">Unity</span>
-            <span class="tag">Action</span>
-            <span class="tag">Roguelite</span>
+            <span class="tag" data-i18n="games.card2.tag1">Unity</span>
+            <span class="tag" data-i18n="games.card2.tag2">Action</span>
+            <span class="tag" data-i18n="games.card2.tag3">Roguelite</span>
           </div>
-          <a href="#" class="game-link">Learn More →</a>
+          <a href="#" class="game-link" data-i18n="games.card2.link">Learn More →</a>
         </div>
       </article>
 
       <article class="game-card glass-panel">
         <div class="game-card-image">
-          <img src="https://placehold.co/600x340/1a1a2e/8b00ff?text=Project+3" alt="Upcoming project screenshot" loading="lazy">
+          <img src="https://placehold.co/600x340/1a1a2e/8b00ff?text=Project+3" alt="Upcoming project screenshot" data-i18n="games.card3.alt" loading="lazy">
         </div>
         <div class="game-card-body">
-          <h3>Project Nexus</h3>
-          <p>An atmospheric exploration game set in a procedurally generated world. Coming soon.</p>
+          <h3 data-i18n="games.card3.title">Project Nexus</h3>
+          <p data-i18n="games.card3.desc">An atmospheric exploration game set in a procedurally generated world. Coming soon.</p>
           <div class="game-tags">
-            <span class="tag">Unity</span>
-            <span class="tag">Exploration</span>
-            <span class="tag">Procedural</span>
+            <span class="tag" data-i18n="games.card3.tag1">Unity</span>
+            <span class="tag" data-i18n="games.card3.tag2">Exploration</span>
+            <span class="tag" data-i18n="games.card3.tag3">Procedural</span>
           </div>
-          <a href="#" class="game-link">Wishlist →</a>
+          <a href="#" class="game-link" data-i18n="games.card3.link">Wishlist →</a>
         </div>
       </article>
     </div>
@@ -432,66 +463,66 @@ body{
 
   <section id="about" class="section">
     <div class="glass-panel about-panel">
-      <h2 class="section-title">About</h2>
+      <h2 class="section-title" data-i18n="about.title">About</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>I'm <strong>Sonder</strong>, an indie game developer passionate about creating unique, emotionally resonant experiences. I build games using Unity, focusing on tight mechanics, atmospheric design, and procedural generation.</p>
-          <p>When I'm not wrangling game objects, I'm diving into shader programming, tool development, and pushing the boundaries of what indie games can achieve. Every project is a chance to blend technical craft with artistic vision.</p>
-          <p>I believe great games come from iteration, attention to detail, and a deep understanding of what makes play feel <em>good</em>.</p>
+          <p data-i18n-html="about.p1">I'm <strong>Sonder</strong>, an indie game developer passionate about creating unique, emotionally resonant experiences. I build games using Unity, focusing on tight mechanics, atmospheric design, and procedural generation.</p>
+          <p data-i18n-html="about.p2">When I'm not wrangling game objects, I'm diving into shader programming, tool development, and pushing the boundaries of what indie games can achieve. Every project is a chance to blend technical craft with artistic vision.</p>
+          <p data-i18n-html="about.p3">I believe great games come from iteration, attention to detail, and a deep understanding of what makes play feel <em>good</em>.</p>
         </div>
         <div class="about-stats">
           <div class="stat">
             <span class="stat-number">3+</span>
-            <span>Games in Development</span>
+            <span data-i18n="about.statGames">Games in Development</span>
           </div>
           <div class="stat">
             <span class="stat-number">5+</span>
-            <span>Years of Unity Experience</span>
+            <span data-i18n="about.statYears">Years of Unity Experience</span>
           </div>
           <div class="stat">
             <span class="stat-number">∞</span>
-            <span>Passion for Game Dev</span>
+            <span data-i18n="about.statPassion">Passion for Game Dev</span>
           </div>
         </div>
       </div>
       <div class="skill-badges">
-        <span class="badge">Unity Engine</span>
-        <span class="badge">C#</span>
-        <span class="badge">ShaderLab / HLSL</span>
-        <span class="badge">Game Design</span>
-        <span class="badge">Procedural Generation</span>
-        <span class="badge">WebGL</span>
-        <span class="badge">HybridCLR</span>
-        <span class="badge">UI / UX</span>
-        <span class="badge">Performance Optimization</span>
+        <span class="badge" data-i18n="skills.unity">Unity Engine</span>
+        <span class="badge" data-i18n="skills.csharp">C#</span>
+        <span class="badge" data-i18n="skills.shaderlab">ShaderLab / HLSL</span>
+        <span class="badge" data-i18n="skills.gamedesign">Game Design</span>
+        <span class="badge" data-i18n="skills.procgen">Procedural Generation</span>
+        <span class="badge" data-i18n="skills.webgl">WebGL</span>
+        <span class="badge" data-i18n="skills.hybridclr">HybridCLR</span>
+        <span class="badge" data-i18n="skills.uiux">UI / UX</span>
+        <span class="badge" data-i18n="skills.perf">Performance Optimization</span>
       </div>
     </div>
   </section>
 
   <section id="contact" class="section">
-    <h2 class="section-title">Contact</h2>
+    <h2 class="section-title" data-i18n="contact.title">Contact</h2>
     <div class="contact-links">
       <a href="mailto:sonder@example.com" class="contact-card glass-panel">
         <span class="contact-icon" aria-hidden="true">✉</span>
-        <span class="contact-label">Email</span>
+        <span class="contact-label" data-i18n="contact.email">Email</span>
       </a>
       <a href="https://github.com/ALEXTANGXIAO" target="_blank" rel="noopener" class="contact-card glass-panel">
         <span class="contact-icon" aria-hidden="true">⌨</span>
-        <span class="contact-label">GitHub</span>
+        <span class="contact-label" data-i18n="contact.github">GitHub</span>
       </a>
       <a href="#" class="contact-card glass-panel">
         <span class="contact-icon" aria-hidden="true">🎮</span>
-        <span class="contact-label">itch.io</span>
+        <span class="contact-label" data-i18n="contact.itch">itch.io</span>
       </a>
       <a href="#" class="contact-card glass-panel">
         <span class="contact-icon" aria-hidden="true">𝕏</span>
-        <span class="contact-label">Twitter / X</span>
+        <span class="contact-label" data-i18n="contact.twitter">Twitter / X</span>
       </a>
     </div>
   </section>
 
   <footer class="footer">
-    <p>&copy; 2026 Sonder. Built with code, art, and way too much caffeine.</p>
+    <p data-i18n-html="footer.copyright">&copy; {year} Sonder. Built with code, art, and way too much caffeine.</p>
   </footer>
 </div>
 
@@ -1146,6 +1177,305 @@ class FluidSimulation {
 // ============================================================
 // APP CONTROLLER
 // ============================================================
+// ============================================================
+// I18N — CLIENT-SIDE INTERNATIONALIZATION
+// ============================================================
+const I18n = {
+  current: 'en',
+
+  translations: {
+    en: {
+      'meta.title': 'Sonder — Indie Game Developer',
+      'meta.desc': 'Sonder — Indie Game Developer. Building immersive worlds at the intersection of code and art.',
+      'meta.ogTitle': 'Sonder — Indie Game Developer',
+      'meta.ogDesc': 'Building immersive worlds at the intersection of code and art',
+      'meta.twTitle': 'Sonder — Indie Game Developer',
+      'meta.twDesc': 'Building immersive worlds at the intersection of code and art',
+      'nav.logo': 'SONDER',
+      'nav.games': 'Games',
+      'nav.about': 'About',
+      'nav.contact': 'Contact',
+      'nav.toggle': 'Toggle menu',
+      'hero.name': 'Sonder',
+      'hero.role': 'Indie Game Developer',
+      'hero.tagline': 'Building immersive worlds at the intersection of code and art',
+      'hero.cta1': 'View Games',
+      'hero.cta2': 'Get in Touch',
+      'games.title': 'Games',
+      'games.card1.alt': 'Sonder Engine Demo screenshot',
+      'games.card1.title': 'Sonder Engine',
+      'games.card1.desc': 'A custom game built with Unity featuring innovative conveyor-belt mechanics and puzzle-solving gameplay.',
+      'games.card1.tag1': 'Unity',
+      'games.card1.tag2': 'Puzzle',
+      'games.card1.tag3': '3D',
+      'games.card1.link': 'Learn More →',
+      'games.card2.alt': 'Loop Bullet screenshot',
+      'games.card2.title': 'Loop Bullet',
+      'games.card2.desc': 'Fast-paced bullet-hell roguelite with looping mechanics. Dodge, weave, and master the loop.',
+      'games.card2.tag1': 'Unity',
+      'games.card2.tag2': 'Action',
+      'games.card2.tag3': 'Roguelite',
+      'games.card2.link': 'Learn More →',
+      'games.card3.alt': 'Upcoming project screenshot',
+      'games.card3.title': 'Project Nexus',
+      'games.card3.desc': 'An atmospheric exploration game set in a procedurally generated world. Coming soon.',
+      'games.card3.tag1': 'Unity',
+      'games.card3.tag2': 'Exploration',
+      'games.card3.tag3': 'Procedural',
+      'games.card3.link': 'Wishlist →',
+      'about.title': 'About',
+      'about.p1': "I'm <strong>Sonder</strong>, an indie game developer passionate about creating unique, emotionally resonant experiences. I build games using Unity, focusing on tight mechanics, atmospheric design, and procedural generation.",
+      'about.p2': "When I'm not wrangling game objects, I'm diving into shader programming, tool development, and pushing the boundaries of what indie games can achieve. Every project is a chance to blend technical craft with artistic vision.",
+      'about.p3': 'I believe great games come from iteration, attention to detail, and a deep understanding of what makes play feel <em>good</em>.',
+      'about.statGames': 'Games in Development',
+      'about.statYears': 'Years of Unity Experience',
+      'about.statPassion': 'Passion for Game Dev',
+      'skills.unity': 'Unity Engine',
+      'skills.csharp': 'C#',
+      'skills.shaderlab': 'ShaderLab / HLSL',
+      'skills.gamedesign': 'Game Design',
+      'skills.procgen': 'Procedural Generation',
+      'skills.webgl': 'WebGL',
+      'skills.hybridclr': 'HybridCLR',
+      'skills.uiux': 'UI / UX',
+      'skills.perf': 'Performance Optimization',
+      'contact.title': 'Contact',
+      'contact.email': 'Email',
+      'contact.github': 'GitHub',
+      'contact.itch': 'itch.io',
+      'contact.twitter': 'Twitter / X',
+      'footer.copyright': '&copy; {year} Sonder. Built with code, art, and way too much caffeine.',
+    },
+
+    'zh-CN': {
+      'meta.title': 'Sonder — 独立游戏开发者',
+      'meta.desc': 'Sonder — 独立游戏开发者。在代码与艺术的交汇处构建沉浸式世界。',
+      'meta.ogTitle': 'Sonder — 独立游戏开发者',
+      'meta.ogDesc': '在代码与艺术的交汇处构建沉浸式世界',
+      'meta.twTitle': 'Sonder — 独立游戏开发者',
+      'meta.twDesc': '在代码与艺术的交汇处构建沉浸式世界',
+      'nav.logo': 'SONDER',
+      'nav.games': '游戏作品',
+      'nav.about': '关于',
+      'nav.contact': '联系方式',
+      'nav.toggle': '切换菜单',
+      'hero.name': 'Sonder',
+      'hero.role': '独立游戏开发者',
+      'hero.tagline': '在代码与艺术的交汇处构建沉浸式世界',
+      'hero.cta1': '查看游戏',
+      'hero.cta2': '联系我',
+      'games.title': '游戏作品',
+      'games.card1.alt': 'Sonder Engine 演示截图',
+      'games.card1.title': 'Sonder Engine',
+      'games.card1.desc': '一款使用 Unity 构建的自定义游戏，包含创新的传送带机制与解谜玩法。',
+      'games.card1.tag1': 'Unity',
+      'games.card1.tag2': '解谜',
+      'games.card1.tag3': '3D',
+      'games.card1.link': '了解更多 →',
+      'games.card2.alt': 'Loop Bullet 截图',
+      'games.card2.title': 'Loop Bullet',
+      'games.card2.desc': '快节奏弹幕 roguelite 游戏，循环机制为核心。闪避、穿梭、掌握循环。',
+      'games.card2.tag1': 'Unity',
+      'games.card2.tag2': '动作',
+      'games.card2.tag3': 'Roguelite',
+      'games.card2.link': '了解更多 →',
+      'games.card3.alt': '即将发布项目截图',
+      'games.card3.title': 'Project Nexus',
+      'games.card3.desc': '一款设定在程序生成世界中的氛围探索游戏。即将推出。',
+      'games.card3.tag1': 'Unity',
+      'games.card3.tag2': '探索',
+      'games.card3.tag3': '程序生成',
+      'games.card3.link': '加入愿望单 →',
+      'about.title': '关于',
+      'about.p1': '我是 <strong>Sonder</strong>，一位热衷于创造独特、富有情感共鸣体验的独立游戏开发者。我使用 Unity 构建游戏，专注于紧凑的机制设计、氛围营造和程序生成。',
+      'about.p2': '在不折腾游戏对象的时候，我潜心研究着色器编程、工具开发，并不断突破独立游戏的可能性边界。每个项目都是将技术工艺与艺术愿景融合的机会。',
+      'about.p3': '我相信优秀的游戏源于不断迭代、对细节的关注，以及对让游玩体验<em>真正出彩</em>的深刻理解。',
+      'about.statGames': '正在开发的游戏',
+      'about.statYears': 'Unity 使用经验',
+      'about.statPassion': '对游戏开发的热爱',
+      'skills.unity': 'Unity Engine',
+      'skills.csharp': 'C#',
+      'skills.shaderlab': 'ShaderLab / HLSL',
+      'skills.gamedesign': '游戏设计',
+      'skills.procgen': '程序生成',
+      'skills.webgl': 'WebGL',
+      'skills.hybridclr': 'HybridCLR',
+      'skills.uiux': 'UI / UX',
+      'skills.perf': '性能优化',
+      'contact.title': '联系方式',
+      'contact.email': '电子邮件',
+      'contact.github': 'GitHub',
+      'contact.itch': 'itch.io',
+      'contact.twitter': 'Twitter / X',
+      'footer.copyright': '&copy; {year} Sonder。用代码、艺术和大量咖啡因构建。',
+    },
+
+    ja: {
+      'meta.title': 'Sonder — インディーゲーム開発者',
+      'meta.desc': 'Sonder — インディーゲーム開発者。コードとアートの交差点で没入感のある世界を構築。',
+      'meta.ogTitle': 'Sonder — インディーゲーム開発者',
+      'meta.ogDesc': 'コードとアートの交差点で没入感のある世界を構築',
+      'meta.twTitle': 'Sonder — インディーゲーム開発者',
+      'meta.twDesc': 'コードとアートの交差点で没入感のある世界を構築',
+      'nav.logo': 'SONDER',
+      'nav.games': 'ゲーム',
+      'nav.about': '概要',
+      'nav.contact': 'お問い合わせ',
+      'nav.toggle': 'メニューを切り替え',
+      'hero.name': 'Sonder',
+      'hero.role': 'インディーゲーム開発者',
+      'hero.tagline': 'コードとアートの交差点で没入感のある世界を構築',
+      'hero.cta1': 'ゲームを見る',
+      'hero.cta2': 'お問い合わせ',
+      'games.title': 'ゲーム',
+      'games.card1.alt': 'Sonder Engine デモのスクリーンショット',
+      'games.card1.title': 'Sonder Engine',
+      'games.card1.desc': 'Unityで構築されたカスタムゲーム。革新的なコンベアベルトの仕組みとパズル解決のゲームプレイを特徴としています。',
+      'games.card1.tag1': 'Unity',
+      'games.card1.tag2': 'パズル',
+      'games.card1.tag3': '3D',
+      'games.card1.link': '詳細を見る →',
+      'games.card2.alt': 'Loop Bullet のスクリーンショット',
+      'games.card2.title': 'Loop Bullet',
+      'games.card2.desc': 'ループ機構を備えたペースの速い弾幕ローグライト。回避し、織り交ぜ、ループをマスターしましょう。',
+      'games.card2.tag1': 'Unity',
+      'games.card2.tag2': 'アクション',
+      'games.card2.tag3': 'ローグライト',
+      'games.card2.link': '詳細を見る →',
+      'games.card3.alt': '近日公開プロジェクトのスクリーンショット',
+      'games.card3.title': 'Project Nexus',
+      'games.card3.desc': 'プロシージャル生成された世界を舞台にした雰囲気のある探索ゲーム。近日公開。',
+      'games.card3.tag1': 'Unity',
+      'games.card3.tag2': '探索',
+      'games.card3.tag3': 'プロシージャル',
+      'games.card3.link': 'ウィッシュリスト →',
+      'about.title': '概要',
+      'about.p1': '<strong>Sonder</strong>と申します。ユニークで感情に響く体験の創造に情熱を注ぐインディーゲーム開発者です。Unityを使用し、タイトなメカニクス、雰囲気のあるデザイン、プロシージャル生成に重点を置いてゲームを制作しています。',
+      'about.p2': 'ゲームオブジェクトを扱っていない時は、シェーダープログラミングやツール開発に没頭し、インディーゲームの可能性の限界に挑戦しています。すべてのプロジェクトは、技術的な職人技と芸術的ビジョンを融合させる機会です。',
+      'about.p3': '優れたゲームは反復、細部へのこだわり、そしてプレイが<em>気持ちいい</em>と感じさせるものへの深い理解から生まれると信じています。',
+      'about.statGames': '開発中のゲーム',
+      'about.statYears': 'Unityの経験年数',
+      'about.statPassion': 'ゲーム開発への情熱',
+      'skills.unity': 'Unity Engine',
+      'skills.csharp': 'C#',
+      'skills.shaderlab': 'ShaderLab / HLSL',
+      'skills.gamedesign': 'ゲームデザイン',
+      'skills.procgen': 'プロシージャル生成',
+      'skills.webgl': 'WebGL',
+      'skills.hybridclr': 'HybridCLR',
+      'skills.uiux': 'UI / UX',
+      'skills.perf': 'パフォーマンス最適化',
+      'contact.title': 'お問い合わせ',
+      'contact.email': 'メール',
+      'contact.github': 'GitHub',
+      'contact.itch': 'itch.io',
+      'contact.twitter': 'Twitter / X',
+      'footer.copyright': '&copy; {year} Sonder。コードとアートと大量のカフェインで構築。',
+    },
+  },
+
+  init() {
+    this.current = this._preferred();
+    this.apply(this.current);
+    this._bindSelector();
+  },
+
+  _preferred() {
+    const stored = localStorage.getItem('lang');
+    if (stored && this.translations[stored]) return stored;
+    const nav = (navigator.language || 'en').toLowerCase();
+    if (this.translations[nav]) return nav;
+    const prefix = nav.split('-')[0];
+    const prefixMatch = Object.keys(this.translations).find(k => k.split('-')[0] === prefix);
+    if (prefixMatch) return prefixMatch;
+    return 'en';
+  },
+
+  apply(lang) {
+    this.current = lang;
+    localStorage.setItem('lang', lang);
+    document.documentElement.lang = lang;
+    const t = this.translations[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (!t[key]) return;
+      if (el.tagName === 'IMG') {
+        el.setAttribute('alt', t[key]);
+      } else if (el.hasAttribute('aria-label') && el.getAttribute('data-i18n') === 'nav.toggle') {
+        el.setAttribute('aria-label', t[key]);
+      } else if (el.tagName === 'TITLE') {
+        // handled separately
+      } else {
+        el.textContent = t[key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (!t[key]) return;
+      el.innerHTML = t[key].replace('{year}', new Date().getFullYear());
+    });
+
+    if (t['meta.title']) document.title = t['meta.title'];
+    this._setMeta('description', t['meta.desc']);
+    this._setMeta('og:title', t['meta.ogTitle'], 'property');
+    this._setMeta('og:description', t['meta.ogDesc'], 'property');
+    this._setMeta('twitter:title', t['meta.twTitle']);
+    this._setMeta('twitter:description', t['meta.twDesc']);
+
+    document.querySelectorAll('.lang-select-dropdown [data-lang]').forEach(opt => {
+      opt.setAttribute('aria-selected', opt.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+
+    const label = document.querySelector('.lang-select-label');
+    if (label) label.textContent = lang.toUpperCase().substring(0, 2);
+  },
+
+  _setMeta(name, value, attrName = 'name') {
+    if (!value) return;
+    const el = document.querySelector(`meta[${attrName}="${name}"]`);
+    if (el) el.setAttribute('content', value);
+  },
+
+  _bindSelector() {
+    const btn = document.querySelector('.lang-select-btn');
+    const dropdown = document.querySelector('.lang-select-dropdown');
+    if (!btn || !dropdown) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = dropdown.toggleAttribute('hidden');
+      btn.setAttribute('aria-expanded', !open);
+    });
+
+    dropdown.addEventListener('click', (e) => {
+      const opt = e.target.closest('[data-lang]');
+      if (!opt) return;
+      const lang = opt.getAttribute('data-lang');
+      this.apply(lang);
+      dropdown.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+
+    document.addEventListener('click', () => {
+      dropdown.setAttribute('hidden', '');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !dropdown.hasAttribute('hidden')) {
+        dropdown.setAttribute('hidden', '');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      }
+    });
+  },
+};
+
+// ============================================================
+// APP CONTROLLER
+// ============================================================
 class App {
     constructor() {
         this.canvas = document.getElementById('fluid-canvas');
@@ -1170,6 +1500,8 @@ class App {
             this.canvas.style.display = 'none';
             this.fallbackEl.style.display = 'block';
         }
+
+        I18n.init();
 
         this._bindEvents();
         if (this.fluid) {
