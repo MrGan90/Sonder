@@ -311,7 +311,7 @@ body{
   .navbar{top:8px;width:calc(100% - 16px);padding:0 1.25rem}
   .nav-links{
     display:none;position:absolute;top:calc(100% + 8px);
-    right:0;flex-direction:column;gap:0;min-width:180px;
+    right:0;flex-direction:column;gap:0;min-width:130px;
     background:rgba(8,8,24,0.95);backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
     border:1px solid var(--glass-border);border-radius:var(--radius);
@@ -331,7 +331,7 @@ body{
   .lang-select-label{display:none}
   .lang-select-chevron{display:none}
   .lang-select-icon{font-size:1rem}
-  .lang-select-dropdown{right:0;min-width:160px}
+  .lang-select-dropdown{right:0;min-width:120px}
 }
 
 @media(max-width:480px){
@@ -348,7 +348,7 @@ body{
 	.lang-select-icon{font-size:0.85rem;line-height:1}
 	.lang-select-chevron{font-size:0.6rem;transition:transform var(--transition-medium);line-height:1}
 	.lang-select-btn[aria-expanded="true"] .lang-select-chevron{transform:rotate(180deg)}
-	.lang-select-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:148px;list-style:none;background:rgba(8,8,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;padding:0.35rem 0;box-shadow:0 12px 40px rgba(0,0,0,0.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 200ms var(--ease-out-expo),transform 200ms var(--ease-out-expo)}
+	.lang-select-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:120px;list-style:none;background:rgba(8,8,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius);overflow:hidden;padding:0.35rem 0;box-shadow:0 12px 40px rgba(0,0,0,0.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity 200ms var(--ease-out-expo),transform 200ms var(--ease-out-expo)}
 	.lang-select-dropdown[hidden]{display:block;opacity:0;transform:translateY(-6px);pointer-events:none}
 	.lang-select-dropdown:not([hidden]){opacity:1;transform:translateY(0);pointer-events:auto}
 	.lang-select-dropdown [role="option"]{padding:0.6rem 1.25rem;font-size:0.85rem;color:var(--text-secondary);cursor:pointer;transition:all 150ms ease;text-align:right}
