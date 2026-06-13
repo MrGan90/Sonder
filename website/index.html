@@ -138,7 +138,7 @@ body{
   background-size:200% 200%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
-  animation:gradientShift 6s ease-in-out infinite,glitchShake 0.3s ease-out 0.2s;
+  animation:gradientShift 6s ease-in-out infinite,glitchShake 0.5s ease-out 0.2s;
   position:relative;
 }
 .hero-name::before,.hero-name::after{
@@ -151,11 +151,11 @@ body{
   opacity:0;
 }
 .hero-name::before{
-  animation:glitchR 0.35s ease-out 0.2s;
+  animation:glitchR 0.6s ease-out 0.2s;
   text-shadow:2px 0 var(--neon-magenta);
 }
 .hero-name::after{
-  animation:glitchB 0.35s ease-out 0.2s;
+  animation:glitchB 0.6s ease-out 0.2s;
   text-shadow:-2px 0 var(--neon-cyan);
 }
 @keyframes gradientShift{
@@ -164,20 +164,22 @@ body{
 }
 @keyframes glitchShake{
   0%,100%{transform:translate(0)}
-  20%{transform:translate(-4px,2px)}
-  40%{transform:translate(4px,-1px)}
-  60%{transform:translate(-2px,-3px)}
-  80%{transform:translate(3px,1px)}
+  15%{transform:translate(-6px,3px)}
+  35%{transform:translate(6px,-2px)}
+  55%{transform:translate(-3px,-4px)}
+  75%{transform:translate(5px,2px)}
 }
 @keyframes glitchR{
-  0%{opacity:0;clip-path:inset(20% 0 60% 0);transform:translate(2px,0)}
-  50%{opacity:0.8;clip-path:inset(60% 0 20% 0);transform:translate(-6px,2px)}
-  100%{opacity:0;clip-path:inset(20% 0 60% 0);transform:translate(0,0)}
+  0%{opacity:0;clip-path:inset(15% 0 70% 0);transform:translate(3px,0)}
+  30%{opacity:0.8;clip-path:inset(70% 0 10% 0);transform:translate(-8px,3px)}
+  70%{opacity:0.6;clip-path:inset(40% 0 50% 0);transform:translate(5px,-1px)}
+  100%{opacity:0;clip-path:inset(15% 0 70% 0);transform:translate(0,0)}
 }
 @keyframes glitchB{
-  0%{opacity:0;clip-path:inset(60% 0 20% 0);transform:translate(-2px,0)}
-  50%{opacity:0.8;clip-path:inset(10% 0 80% 0);transform:translate(6px,-2px)}
-  100%{opacity:0;clip-path:inset(60% 0 20% 0);transform:translate(0,0)}
+  0%{opacity:0;clip-path:inset(65% 0 20% 0);transform:translate(-3px,0)}
+  30%{opacity:0.8;clip-path:inset(5% 0 85% 0);transform:translate(8px,-3px)}
+  70%{opacity:0.6;clip-path:inset(50% 0 35% 0);transform:translate(-4px,2px)}
+  100%{opacity:0;clip-path:inset(65% 0 20% 0);transform:translate(0,0)}
 }
 .hero-role{
   font-size:clamp(1.25rem,3vw,1.75rem);font-weight:600;
