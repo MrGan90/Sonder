@@ -354,6 +354,43 @@ body{
 	.lang-select-dropdown [role="option"]:hover{background:rgba(0,229,255,0.08);color:var(--neon-cyan)}
 	.lang-select-dropdown [role="option"][aria-selected="true"]{color:var(--neon-cyan);font-weight:600;background:rgba(0,229,255,0.05)}
 
+	/* ---- Game Detail Modal ---- */
+	.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+	.modal-overlay[hidden]{display:none}
+	.modal-backdrop{position:absolute;inset:0;background:rgba(2,2,10,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer}
+	.modal-panel{position:relative;width:100%;max-width:800px;max-height:90vh;overflow-y:auto;padding:0;z-index:1;animation:modalIn 350ms var(--ease-out-expo)}
+	@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+	.modal-close{position:absolute;top:0.75rem;right:0.75rem;z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:rgba(8,8,20,0.8);color:var(--text-secondary);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 200ms ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);line-height:1}
+	.modal-close:hover{color:var(--neon-magenta);border-color:var(--neon-magenta);box-shadow:0 0 16px rgba(255,0,229,0.2)}
+	.modal-hero{aspect-ratio:16/9;overflow:hidden;border-radius:var(--radius) var(--radius) 0 0;background:rgba(255,255,255,0.03)}
+	.modal-hero img{width:100%;height:100%;object-fit:cover;display:block}
+	.modal-body{padding:2rem 2.5rem 2.5rem}
+	.modal-title{font-size:1.75rem;font-weight:700;margin-bottom:0.75rem;color:var(--text-primary)}
+	.modal-tags{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem}
+	.modal-desc{color:var(--text-secondary);line-height:1.7;margin-bottom:1.5rem}
+	.modal-platforms{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.75rem}
+	.modal-platforms span{display:flex;align-items:center;gap:0.4rem;padding:6px 14px;background:rgba(255,255,255,0.04);border-radius:100px;font-size:0.82rem;color:var(--text-secondary)}
+	.modal-screenshots{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:0.5rem;margin-bottom:1.75rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+	.modal-screenshots img{flex:0 0 auto;width:200px;height:125px;object-fit:cover;border-radius:var(--radius-sm);scroll-snap-align:start;transition:transform 200ms ease}
+	.modal-screenshots img:hover{transform:scale(1.03)}
+	.modal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem}
+	.modal-stat{text-align:center;padding:1rem 0.5rem;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm)}
+	.modal-stat .stat-icon{font-size:1.25rem;display:block;margin-bottom:0.35rem}
+	.modal-stat strong{display:block;font-size:1.15rem;color:var(--text-primary);margin-bottom:0.15rem}
+	.modal-stat .stat-label{font-size:0.78rem;color:var(--text-muted)}
+	.modal-cta{display:block;text-align:center;width:fit-content;margin:0 auto}
+
+	/* ---- Mobile modal ---- */
+	@media(max-width:768px){
+	  .modal-overlay{padding:0;align-items:flex-end}
+	  .modal-panel{max-width:100%;max-height:95vh;border-radius:var(--radius) var(--radius) 0 0}
+	  .modal-body{padding:1.5rem}
+	  .modal-title{font-size:1.4rem}
+	  .modal-screenshots img{width:150px;height:94px}
+	  .modal-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+	  .modal-stat{padding:0.75rem 0.25rem}
+	}
+
 	/* ---- Accessibility ---- */
 	@media(prefers-reduced-motion:reduce){
 	  *,*::before,*::after{
@@ -413,7 +450,7 @@ body{
   <section id="games" class="section">
     <h2 class="section-title" data-i18n="games.title">Games</h2>
     <div class="game-grid">
-      <article class="game-card glass-panel">
+      <article class="game-card glass-panel" data-game="sonder-engine">
         <div class="game-card-image">
           <img src="https://placehold.co/600x340/1a1a2e/00e5ff?text=Sonder+Engine+Demo" alt="Sonder Engine Demo screenshot" data-i18n="games.card1.alt" loading="lazy">
         </div>
@@ -429,7 +466,7 @@ body{
         </div>
       </article>
 
-      <article class="game-card glass-panel">
+      <article class="game-card glass-panel" data-game="loop-bullet">
         <div class="game-card-image">
           <img src="https://placehold.co/600x340/1a1a2e/ff00e5?text=Loop+Bullet" alt="Loop Bullet screenshot" data-i18n="games.card2.alt" loading="lazy">
         </div>
@@ -445,7 +482,7 @@ body{
         </div>
       </article>
 
-      <article class="game-card glass-panel">
+      <article class="game-card glass-panel" data-game="project-nexus">
         <div class="game-card-image">
           <img src="https://placehold.co/600x340/1a1a2e/8b00ff?text=Project+3" alt="Upcoming project screenshot" data-i18n="games.card3.alt" loading="lazy">
         </div>
@@ -526,6 +563,28 @@ body{
   <footer class="footer">
     <p data-i18n-html="footer.copyright">&copy; {year} Sonder. Built with code, art, and way too much caffeine.</p>
   </footer>
+</div>
+
+<!-- ============================================================
+     GAME DETAIL MODAL
+     ============================================================ -->
+<div class="modal-overlay" id="game-modal" hidden>
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel glass-panel">
+    <button class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-hero">
+      <img id="modal-hero-img" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-tags" id="modal-tags"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-platforms" id="modal-platforms"></div>
+      <div class="modal-screenshots" id="modal-screenshots"></div>
+      <div class="modal-stats" id="modal-stats"></div>
+      <a href="#" class="btn btn-primary modal-cta" id="modal-cta" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -1476,6 +1535,209 @@ const I18n = {
 };
 
 // ============================================================
+// GAME DATA & MODAL
+// ============================================================
+const gameData = {
+  'sonder-engine': {
+    hero: 'https://placehold.co/800x450/0a0a20/00e5ff?text=Sonder+Engine',
+    screenshots: [
+      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+1',
+      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+2',
+      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+3',
+      'https://placehold.co/400x250/0a0a20/00e5ff?text=Gameplay+4',
+    ],
+    platforms: ['🪟 Windows', '🍎 macOS', '🐧 Linux'],
+    storeUrl: '#',
+    i18n: {
+      en: {
+        title: 'Sonder Engine',
+        desc: 'A precision-crafted puzzle game built from the ground up with Unity. Master innovative conveyor-belt mechanics through increasingly complex levels. Each puzzle is a hand-designed challenge that tests your spatial reasoning and creative problem-solving skills.',
+        stat1: '50K+', stat1Label: 'Players',
+        stat2: '4.8', stat2Label: 'Rating',
+        stat3: '2024', stat3Label: 'Released',
+        cta: 'View on Steam →',
+      },
+      'zh-CN': {
+        title: 'Sonder Engine',
+        desc: '一款基于 Unity 从零打造的精密解谜游戏。通过逐步复杂的关卡掌握创新的传送带机制。每个谜题都是手工设计的挑战，考验你的空间推理和创造性解决问题的能力。',
+        stat1: '50K+', stat1Label: '玩家',
+        stat2: '4.8', stat2Label: '评分',
+        stat3: '2024', stat3Label: '发行',
+        cta: '在 Steam 上查看 →',
+      },
+      ja: {
+        title: 'Sonder Engine',
+        desc: 'Unityでゼロから構築された精密なパズルゲーム。革新的なコンベアベルトの仕組みを、徐々に複雑になるレベルを通じてマスターしましょう。各パズルは空間的推論と創造的問題解決スキルを試す手作りの挑戦です。',
+        stat1: '50K+', stat1Label: 'プレイヤー',
+        stat2: '4.8', stat2Label: '評価',
+        stat3: '2024', stat3Label: 'リリース',
+        cta: 'Steamで見る →',
+      },
+    },
+  },
+  'loop-bullet': {
+    hero: 'https://placehold.co/800x450/0a0a20/ff00e5?text=Loop+Bullet',
+    screenshots: [
+      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+1',
+      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+2',
+      'https://placehold.co/400x250/0a0a20/ff00e5?text=Action+3',
+      'https://placehold.co/400x250/0a0a20/ff00e5?text=Boss+Fight',
+    ],
+    platforms: ['🪟 Windows', '🍎 macOS'],
+    storeUrl: '#',
+    i18n: {
+      en: {
+        title: 'Loop Bullet',
+        desc: 'A high-octane bullet-hell roguelite where every death is a lesson. Weave through intricate bullet patterns, unlock game-changing abilities, and master the loop. Each run is a fresh challenge with procedurally generated stages and bosses.',
+        stat1: '25K+', stat1Label: 'Players',
+        stat2: '4.6', stat2Label: 'Rating',
+        stat3: '2025', stat3Label: 'Released',
+        cta: 'View on Steam →',
+      },
+      'zh-CN': {
+        title: 'Loop Bullet',
+        desc: '一款快节奏弹幕 roguelite 游戏，每次死亡都是一次学习。穿越复杂的弹幕阵列，解锁改变局势的能力，掌握循环的奥秘。每次运行都有程序生成的关卡和首领战。',
+        stat1: '25K+', stat1Label: '玩家',
+        stat2: '4.6', stat2Label: '评分',
+        stat3: '2025', stat3Label: '发行',
+        cta: '在 Steam 上查看 →',
+      },
+      ja: {
+        title: 'Loop Bullet',
+        desc: 'すべての死が教訓となるハイオク弾幕ローグライト。複雑な弾幕パターンをかいくぐり、ゲームを変えるアビリティをアンロックし、ループをマスターしましょう。各ランはプロシージャル生成されたステージとボスによる新鮮な挑戦です。',
+        stat1: '25K+', stat1Label: 'プレイヤー',
+        stat2: '4.6', stat2Label: '評価',
+        stat3: '2025', stat3Label: 'リリース',
+        cta: 'Steamで見る →',
+      },
+    },
+  },
+  'project-nexus': {
+    hero: 'https://placehold.co/800x450/0a0a20/8b00ff?text=Project+Nexus',
+    screenshots: [
+      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+1',
+      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+2',
+      'https://placehold.co/400x250/0a0a20/8b00ff?text=World+3',
+      'https://placehold.co/400x250/0a0a20/8b00ff?text=Atmosphere',
+    ],
+    platforms: ['🪟 Windows', '🍎 macOS'],
+    storeUrl: '#',
+    i18n: {
+      en: {
+        title: 'Project Nexus',
+        desc: 'An atmospheric exploration game set in a procedurally generated universe. Discover ancient ruins, decode lost technologies, and uncover the mysteries of the Nexus. Every world is unique — no two journeys are the same.',
+        stat1: '2026', stat1Label: 'Release',
+        stat2: '2K+', stat2Label: 'Wishlists',
+        stat3: 'TBA', stat3Label: 'Price',
+        cta: 'Wishlist on Steam →',
+      },
+      'zh-CN': {
+        title: 'Project Nexus',
+        desc: '一款设定在程序生成宇宙中的氛围探索游戏。发现远古遗迹，破译失落科技，揭开 Nexus 的神秘面纱。每个世界都独一无二——没有两次旅程是相同的。',
+        stat1: '2026', stat1Label: '发布',
+        stat2: '2K+', stat2Label: '愿望单',
+        stat3: '待定', stat3Label: '价格',
+        cta: '加入 Steam 愿望单 →',
+      },
+      ja: {
+        title: 'Project Nexus',
+        desc: 'プロシージャル生成された宇宙を舞台にした雰囲気のある探索ゲーム。古代遺跡を発見し、失われた技術を解読し、ネクサスの謎を解き明かしましょう。すべての世界がユニーク——同じ旅は二度とありません。',
+        stat1: '2026', stat1Label: 'リリース',
+        stat2: '2K+', stat2Label: 'ウィッシュリスト',
+        stat3: '未定', stat3Label: '価格',
+        cta: 'Steamでウィッシュリスト →',
+      },
+    },
+  },
+};
+
+const GameModal = {
+  init() {
+    this.overlay = document.getElementById('game-modal');
+    this.backdrop = this.overlay.querySelector('.modal-backdrop');
+    this.closeBtn = this.overlay.querySelector('.modal-close');
+
+    // Card click
+    document.querySelectorAll('.game-card[data-game]').forEach(card => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        // Don't trigger if clicking the "Learn More" link
+        if (e.target.closest('.game-link')) return;
+        this.open(card.getAttribute('data-game'));
+      });
+    });
+
+    // Close events
+    this.closeBtn.addEventListener('click', () => this.close());
+    this.backdrop.addEventListener('click', () => this.close());
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !this.overlay.hasAttribute('hidden')) {
+        this.close();
+      }
+    });
+  },
+
+  open(gameId) {
+    const data = gameData[gameId];
+    if (!data) return;
+
+    const lang = I18n.current;
+    const t = data.i18n[lang] || data.i18n.en;
+
+    document.getElementById('modal-hero-img').src = data.hero;
+    document.getElementById('modal-hero-img').alt = t.title;
+    document.getElementById('modal-title').textContent = t.title;
+    document.getElementById('modal-desc').textContent = t.desc;
+
+    // Tags
+    const tagsEl = document.getElementById('modal-tags');
+    tagsEl.innerHTML = '';
+    const cardTags = document.querySelector(`[data-game="${gameId}"] .game-tags`);
+    if (cardTags) {
+      cardTags.querySelectorAll('.tag').forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'tag';
+        span.textContent = tag.textContent;
+        tagsEl.appendChild(span);
+      });
+    }
+
+    // Platforms
+    const platEl = document.getElementById('modal-platforms');
+    platEl.innerHTML = data.platforms.map(p => `<span>${p}</span>`).join('');
+
+    // Screenshots
+    const shotsEl = document.getElementById('modal-screenshots');
+    shotsEl.innerHTML = data.screenshots.map(src =>
+      `<img src="${src}" alt="${t.title} screenshot" loading="lazy">`
+    ).join('');
+
+    // Stats
+    document.getElementById('modal-stats').innerHTML = `
+      <div class="modal-stat"><span class="stat-icon">👥</span><strong>${t.stat1}</strong><span class="stat-label">${t.stat1Label}</span></div>
+      <div class="modal-stat"><span class="stat-icon">⭐</span><strong>${t.stat2}</strong><span class="stat-label">${t.stat2Label}</span></div>
+      <div class="modal-stat"><span class="stat-icon">📅</span><strong>${t.stat3}</strong><span class="stat-label">${t.stat3Label}</span></div>
+    `;
+
+    // CTA
+    const cta = document.getElementById('modal-cta');
+    cta.textContent = t.cta;
+    cta.href = data.storeUrl;
+
+    // Show
+    this.overlay.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    this.overlay.querySelector('.modal-panel').scrollTop = 0;
+  },
+
+  close() {
+    this.overlay.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  },
+};
+
+// ============================================================
 // APP CONTROLLER
 // ============================================================
 class App {
@@ -1504,6 +1766,7 @@ class App {
         }
 
         I18n.init();
+        GameModal.init();
 
         this._bindEvents();
         if (this.fluid) {
