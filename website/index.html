@@ -1815,6 +1815,24 @@ const GameDetail = {
       }
     });
 
+    // Browser back/forward support
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.game) {
+        this._show(e.state.game);
+      } else {
+        this._hide();
+      }
+    });
+
+    // Deep link: open on load if URL has hash
+    if (window.location.hash.startsWith('#game=')) {
+      const id = window.location.hash.slice(6);
+      if (gameData[id]) {
+        history.replaceState({ game: id }, '', window.location.hash);
+        this._show(id);
+      }
+    }
+
     // Screenshots hover: pause auto-scroll
     const track = document.getElementById('detail-screenshots-track');
     if (track) {
@@ -1824,6 +1842,12 @@ const GameDetail = {
   },
 
   open(gameId) {
+    if (!gameData[gameId]) return;
+    history.pushState({ game: gameId }, '', '#game=' + gameId);
+    this._show(gameId);
+  },
+
+  _show(gameId) {
     const data = gameData[gameId];
     if (!data) return;
 
@@ -1928,6 +1952,11 @@ const GameDetail = {
   },
 
   close() {
+    this._hide();
+    history.back();
+  },
+
+  _hide() {
     this._stopScroll();
     this.page.setAttribute('hidden', '');
     document.body.style.overflow = '';
