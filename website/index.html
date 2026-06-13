@@ -107,6 +107,7 @@ body{
   transition:color 150ms ease;
 }
 .nav-logo:hover{color:var(--neon-purple)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{position:relative;
   color:var(--text-secondary);text-decoration:none;
@@ -474,24 +475,26 @@ body{
 
   <nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
     <a href="#hero" class="nav-logo" data-i18n="nav.logo">SONDER</a>
-    <ul class="nav-links">
-      <li><a href="#games" data-i18n="nav.games">Games</a></li>
-      <li><a href="#about" data-i18n="nav.about">About</a></li>
-      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-    </ul>
-    <div class="lang-select" aria-label="Language selector">
-      <button class="lang-select-btn" aria-expanded="false" aria-haspopup="listbox" type="button">
-        <span class="lang-select-icon" aria-hidden="true">🌐</span>
-        <span class="lang-select-label">EN</span>
-        <span class="lang-select-chevron" aria-hidden="true">▾</span>
-      </button>
-      <ul class="lang-select-dropdown" role="listbox" hidden>
-        <li role="option" data-lang="en" aria-selected="true">English</li>
-        <li role="option" data-lang="zh-CN" aria-selected="false">简体中文</li>
-        <li role="option" data-lang="ja" aria-selected="false">日本語</li>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#games" data-i18n="nav.games">Games</a></li>
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
       </ul>
+      <div class="lang-select" aria-label="Language selector">
+        <button class="lang-select-btn" aria-expanded="false" aria-haspopup="listbox" type="button">
+          <span class="lang-select-icon" aria-hidden="true">🌐</span>
+          <span class="lang-select-label">EN</span>
+          <span class="lang-select-chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul class="lang-select-dropdown" role="listbox" hidden>
+          <li role="option" data-lang="en" aria-selected="true">English</li>
+          <li role="option" data-lang="zh-CN" aria-selected="false">简体中文</li>
+          <li role="option" data-lang="ja" aria-selected="false">日本語</li>
+        </ul>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" data-i18n="nav.toggle">☰</button>
     </div>
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" data-i18n="nav.toggle">☰</button>
   </nav>
 
   <section id="hero" class="hero">
